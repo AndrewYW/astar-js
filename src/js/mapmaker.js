@@ -3,12 +3,15 @@ export const generateMap = () => {
   setHards(map);
   setHighways(map);
   console.table(map);
-  debugger;
+  
   setBlocked(map);
   console.table(map);
-  debugger;
-  // setNodes(map);
-  // return map;
+  nodes = createNodePoints(map);
+  return {  
+    map,
+    startNode: nodes.startNode,
+    endNode: nodes.endNode,
+  };
 }
 
 const randomInt = ceiling => {
@@ -64,7 +67,6 @@ const setHighways = map => {
 
   while(paths < 4) {
     if (tries === 500) {
-      debugger;
       highways = [];
       tries = 0;
     } else {
@@ -169,7 +171,6 @@ const makePath = (map, highways, { startCoords, border } ) => {
         if (inBounds(coords.row, coords.col, map.length)) {
           path.push(coords);
         } else {
-          debugger;
           return path.length > 99 ? path : null;
         }
       } else {
@@ -259,6 +260,22 @@ const setBlocked = map => {
   }
 };
 
-const setNodes = map => {
-
+const createNodePoints = map => {
+  let startRow = 0;
+  let startCol = 0;
+  let endRow = 0;
+  let endCol = 0;
+  while (!euclidDistance(startRow, startCol, endRow, endCol)) {
+    startRow = randomInt(20);
+    startCol = randomInt(20);
+    if (randomBoolean()) startRow += (map.length - 20);
+    if (randomBoolean()) startCol += (map.length - 20);
+    endRow = randomInt(20);
+    endCol = randomInt(20);
+    if (randomBoolean()) endRow += (map.length - 20);
+    if (randomBoolean()) endCol += (map.length - 20);
+  }
+  
+  return { startNode: { row: startRow, col: startCol },
+           endNode: { row: endRow, col: endCol }};
 };
