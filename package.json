@@ -1,0 +1,27 @@
+{
+  "name": "astar",
+  "version": "1.0.0",
+  "description": "## Background, Overview",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --mode=development --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndrewYW/astar-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndrewYW/astar-js/issues"
+  },
+  "homepage": "https://github.com/AndrewYW/astar-js#readme",
+  "dependencies": {
+    "babel-loader": "^8.0.5",
+    "gh-pages": "^2.0.1",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3"
+  }
+}

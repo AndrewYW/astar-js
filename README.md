@@ -19,6 +19,12 @@ Heuristic Pathfinder is a visualizer of several heuristic functions applied to t
 + Canvas for rendering and manipulating DOM output
 + Webpack to bundle and serve scripts as needed
 
+#### File Structure
+
++ Models
+  + graph.js: Class holding data regarding the grid (start and end nodes, grid 2d array, etc.)
+  + node.js (object): custom nodes for each grid position. Includes data necessary as well as algorithms to implement
+
 ## Implementation Timeline
 
 + Day 1
