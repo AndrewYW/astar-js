@@ -1,14 +1,15 @@
 export const generateMap = () => {
-  map = Array(160).fill().map(() => Array(160).fill('1'));
+  let map = Array(160).fill().map(() => Array(160).fill('1'));
   setHards(map);
   setHighways(map);
   console.table(map);
   
   setBlocked(map);
   console.table(map);
-  nodes = createNodePoints(map);
+  let nodes = createNodePoints(map);
   return {  
     map,
+    nodeMap: createNodeMap(map),
     startNode: nodes.startNode,
     endNode: nodes.endNode,
   };
@@ -279,3 +280,19 @@ const createNodePoints = map => {
   return { startNode: { row: startRow, col: startCol },
            endNode: { row: endRow, col: endCol }};
 };
+
+const createNodeMap = map => {
+  let nodeMap = Array(160).fill().map(() => Array(160));
+  for (let i = 0; i < map.length; i++) {
+    for (let j = 0; j < map.length; j++) {
+      nodeMap[i][j] = Node(i, j, map[i][j]);
+    }
+  }
+
+  for (let i = 0; i < nodeMap.length; i++) {
+    for (let j = 0; j < nodeMap.length; j++) {
+      nodeMap[i][j].addNeighbors(nodeMap);
+    }
+  }
+  return nodeMap;
+}
