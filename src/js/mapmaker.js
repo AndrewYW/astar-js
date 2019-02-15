@@ -1,3 +1,3 @@
-class Mapmaker {
+export default generateMap = () => {
   
 }
