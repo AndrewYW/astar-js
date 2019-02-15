@@ -1,17 +1,20 @@
+import Node from './node';
+
 export const generateMap = () => {
   let map = Array(160).fill().map(() => Array(160).fill('1'));
   setHards(map);
-  setHighways(map);
-  console.table(map);
-  
+  setHighways(map);  
   setBlocked(map);
+
   console.table(map);
-  let nodes = createNodePoints(map);
+
+  let nodeMap = createNodeMap(map);
+  let { startNode, endNode } = createNodePoints(nodeMap);
   return {  
     map,
-    nodeMap: createNodeMap(map),
-    startNode: nodes.startNode,
-    endNode: nodes.endNode,
+    nodeMap,
+    startNode,
+    endNode,
   };
 }
 
@@ -261,7 +264,7 @@ const setBlocked = map => {
   }
 };
 
-const createNodePoints = map => {
+const createNodePoints = nodeMap => {
   let startRow = 0;
   let startCol = 0;
   let endRow = 0;
@@ -269,16 +272,17 @@ const createNodePoints = map => {
   while (!euclidDistance(startRow, startCol, endRow, endCol)) {
     startRow = randomInt(20);
     startCol = randomInt(20);
-    if (randomBoolean()) startRow += (map.length - 20);
-    if (randomBoolean()) startCol += (map.length - 20);
+    if (randomBoolean()) startRow += (nodeMap.length - 20);
+    if (randomBoolean()) startCol += (nodeMap.length - 20);
     endRow = randomInt(20);
     endCol = randomInt(20);
-    if (randomBoolean()) endRow += (map.length - 20);
-    if (randomBoolean()) endCol += (map.length - 20);
+    if (randomBoolean()) endRow += (nodeMap.length - 20);
+    if (randomBoolean()) endCol += (nodeMap.length - 20);
   }
   
-  return { startNode: { row: startRow, col: startCol },
-           endNode: { row: endRow, col: endCol }};
+  return { startNode: nodeMap[startRow][startCol],
+           endNode: nodeMap[endRow][endCol],
+  }
 };
 
 const createNodeMap = map => {
