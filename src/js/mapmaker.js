@@ -2,20 +2,22 @@ import Node from './node';
 
 export const generateMap = () => {
   let map = Array(160).fill().map(() => Array(160).fill('1'));
-  setHards(map);
-  setHighways(map);  
-  setBlocked(map);
-
-  console.table(map);
-
+  let hardCoordinates = setHards(map);
+  let highways = setHighways(map);
+  let blocked = setBlocked(map); 
   let nodeMap = createNodeMap(map);
   let { startNode, endNode } = createNodePoints(nodeMap);
-  return {  
+  
+  const result = {  
     map,
     nodeMap,
     startNode,
     endNode,
+    hardCoordinates,
+    highways,
+    blocked
   };
+  return result;
 }
 
 const randomInt = ceiling => {
@@ -39,6 +41,7 @@ const inBounds = (row, col, size) => {
 
 const setHards = map => {
   var count = 0;
+  var centers = [];
   var hardCoordinates = [];
   while (count < 8) {
     var repeat = false;
@@ -46,15 +49,16 @@ const setHards = map => {
     var col = randomInt(160);
 
     for (let i = 0; i < count; i++) {
-      if (hardCoordinates.includes([row, col])) repeat = true;
+      if (centers.includes([row, col])) repeat = true;
     }
 
     if (!repeat) {
-      hardCoordinates.push([row, col]);
+      centers.push([row, col]);
 
       for (let i = -15; i < 16; i++){
         for(let j = -15; j < 16; j++){
           if(inBounds(row+i, col+j, 160) && randomBoolean()){
+            hardCoordinates.push({ row: row + i, col: col + j });
             map[row+i][col+j] = '2';
           }
         }
@@ -62,6 +66,8 @@ const setHards = map => {
       count++;
     }
   }
+
+  return hardCoordinates;
 };
 
 const setHighways = map => {
@@ -91,6 +97,8 @@ const setHighways = map => {
       map[coord.row][coord.col] = 'b';
     }
   });
+
+  return highways;
 };
 
 const setStartCoords = (size) => {
@@ -251,17 +259,20 @@ const changeDirection = dir => {
 
 const setBlocked = map => {
   const MAX_BLOCKED = Math.pow(map.length, 2) / 5;
-
-  let blocked = 0;
-  while (blocked != MAX_BLOCKED) {
+  let blocked = [];
+  let blockCount = 0;
+  while (blockCount != MAX_BLOCKED) {
     let row = randomInt(map.length);
     let col = randomInt(map.length);
 
     if(map[row][col] === '1' || map[row][col] === '2') {
       map[row][col] = '0';
-      blocked++;
+      blocked.push({row: row, col: col})
+      blockCount++;
     }
   }
+
+  return blocked;
 };
 
 const createNodePoints = nodeMap => {
