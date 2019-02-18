@@ -1,5 +1,5 @@
 import * as DrawUtil from './draw_util';
-import { generateMap } from './mapmaker';
+import { generateMap, generateRandomMap } from './mapmaker';
 
 export const SIZE = 800;
 
@@ -19,8 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
     output.innerHTML = this.value;
   }
   random.onclick = function() { 
-    createRandomMap(ctx); 
-    random.innerHTML = "Create another map!"
+      random.disabled = true;
+      createRandomMap(ctx);
+      random.innerHTML = "Create another map!"
+      random.disabled = false;
   };
   
   DrawUtil.clearTerrain(ctx);
@@ -28,6 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function createRandomMap(ctx) {
-  const map = generateMap();
+  var map = generateRandomMap();
   DrawUtil.drawMap(ctx, map);
 }

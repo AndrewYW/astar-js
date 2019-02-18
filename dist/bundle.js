@@ -129,6 +129,8 @@ const drawMap = (ctx, map) => {
     // offset += 1;
   });
 
+  setTimeout(function(){ drawPoints( ctx, map.startNode, map.endNode )}, offset);
+
 }
 
 const drawTerrain = (ctx, {row, col}, fillStyle) => {
@@ -166,6 +168,15 @@ const drawPath = (ctx, node) => {
 
 }
 
+const drawPoints = (ctx, start, end) => {
+  
+  drawTerrain(ctx, {row: start.row, col: start.col}, "yellow");
+  drawTerrain(ctx, {row: end.row, col: end.col}, "yellow");
+  
+}
+
+
+
 /***/ }),
 
 /***/ "./src/js/index.js":
@@ -201,8 +212,10 @@ document.addEventListener("DOMContentLoaded", () => {
     output.innerHTML = this.value;
   }
   random.onclick = function() { 
-    createRandomMap(ctx); 
-    random.innerHTML = "Create another map!"
+      random.disabled = true;
+      createRandomMap(ctx);
+      random.innerHTML = "Create another map!"
+      random.disabled = false;
   };
   
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"](ctx);
@@ -210,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function createRandomMap(ctx) {
-  const map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"])();
+  var map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateRandomMap"])();
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map);
 }
 
@@ -220,20 +233,21 @@ function createRandomMap(ctx) {
 /*!****************************!*\
   !*** ./src/js/mapmaker.js ***!
   \****************************/
-/*! exports provided: generateMap */
+/*! exports provided: generateMap, generateRandomMap */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateMap", function() { return generateMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateRandomMap", function() { return generateRandomMap; });
 /* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node */ "./src/js/node.js");
 
 
-const generateMap = () => {
+const generateMap = (centerCount, pathCount, blockRate) => {
   let map = Array(160).fill().map(() => Array(160).fill('1'));
-  let hardCoordinates = setHards(map);
-  let highways = setHighways(map);
-  let blocked = setBlocked(map); 
+  let hardCoordinates = setHards(map, centerCount);
+  let highways = setHighways(map, pathCount);
+  let blocked = setBlocked(map, blockRate); 
   let nodeMap = createNodeMap(map);
   let { startNode, endNode } = createNodePoints(nodeMap);
 
@@ -246,6 +260,16 @@ const generateMap = () => {
     highways,
     blocked
   };
+  return result;
+}
+
+const generateRandomMap = () => {
+  const centerCount = Math.floor(Math.random() * 16);
+  const pathCount = Math.floor(Math.random() * 12);
+  const blockRate = Math.random() * .3;
+
+  const result = generateMap(centerCount, pathCount, blockRate);
+  debugger;
   return result;
 }
 
@@ -268,11 +292,11 @@ const inBounds = (row, col, size) => {
   return ((row > -1) && (row < size) && (col > -1) && (col < size));
 }
 
-const setHards = map => {
+const setHards = (map, centerCount = 8) => {
   var count = 0;
   var centers = [];
   var hardCoordinates = [];
-  while (count < 8) {
+  while (count < centerCount) {
     var repeat = false;
     var row = randomInt(160);
     var col = randomInt(160);
@@ -299,13 +323,13 @@ const setHards = map => {
   return hardCoordinates;
 };
 
-const setHighways = map => {
+const setHighways = (map, pathCount) => {
   var highways = [];
   let tries = 0;
   let paths = 0;
 
-  while(paths < 6) {
-    if (tries === 800) {
+  while(paths < pathCount) {
+    if (tries === 50000) {
       highways = [];
       tries = 0;
     } else {
@@ -494,8 +518,8 @@ const changeDirection = dir => {
 };
 
 
-const setBlocked = map => {
-  const MAX_BLOCKED = Math.pow(map.length, 2) / 5;
+const setBlocked = (map, blockRate) => {
+  const MAX_BLOCKED = Math.floor(Math.pow(map.length, 2) * blockRate);
   let blocked = [];
   let blockCount = 0;
   while (blockCount != MAX_BLOCKED) {

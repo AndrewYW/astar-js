@@ -26,6 +26,8 @@ export const drawMap = (ctx, map) => {
     // offset += 1;
   });
 
+  setTimeout(function(){ drawPoints( ctx, map.startNode, map.endNode )}, offset);
+
 }
 
 export const drawTerrain = (ctx, {row, col}, fillStyle) => {
@@ -62,3 +64,11 @@ export const drawNode = (ctx, node) => {
 export const drawPath = (ctx, node) => {
 
 }
+
+const drawPoints = (ctx, start, end) => {
+  
+  drawTerrain(ctx, {row: start.row, col: start.col}, "yellow");
+  drawTerrain(ctx, {row: end.row, col: end.col}, "yellow");
+  
+}
+
