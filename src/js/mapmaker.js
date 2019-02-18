@@ -7,7 +7,7 @@ export const generateMap = () => {
   let blocked = setBlocked(map); 
   let nodeMap = createNodeMap(map);
   let { startNode, endNode } = createNodePoints(nodeMap);
-  
+
   const result = {  
     map,
     nodeMap,
@@ -75,12 +75,12 @@ const setHighways = map => {
   let tries = 0;
   let paths = 0;
 
-  while(paths < 4) {
-    if (tries === 500) {
+  while(paths < 6) {
+    if (tries === 800) {
       highways = [];
       tries = 0;
     } else {
-      path = makePath(map, highways, setStartCoords(map.length));
+      let path = makePath(map, highways, setStartCoords(map.length));
       if (path != null) {
         highways = highways.concat(path);
         paths++;
@@ -179,11 +179,12 @@ const makePath = (map, highways, { startCoords, border } ) => {
           break;
       }
 
-      if (!(highways.includes(coords) || path.includes(coords))) {
+      if (!hasCoords(highways, path, coords)) {
         if (inBounds(coords.row, coords.col, map.length)) {
           path.push(coords);
         } else {
-          return path.length > 99 ? path : null;
+          // debugger
+          return (path.length > 99 ? path : null);
         }
       } else {
         return null;
@@ -212,11 +213,34 @@ const makePath = (map, highways, { startCoords, border } ) => {
   }
 }
 
+const hasCoords = (highways, path, {row, col}) => {
+  // highways.forEach(coord => {
+  //   if (coord.row === row && coord.col === col) return true;
+  // });
+  // path.forEach(coord => {
+  //   if (coord.row === row && coord.col === col) return true;
+  // });
+
+  // return false;
+
+  // for (let i = 0; i < highways.length; i++) {
+  //   if (highways[i] === coord) return true;
+  // }
+  // for (let i = 0; i < path.length; i++) {
+  //   if (path[i] === coord) return true;
+  // }
+
+  if (highways.some(el => el.row === row && el.col === col)) return true;
+  if (path.some(el => el.row === row && el.col === col)) return true;
+
+  return false;
+}
+
 const changeDirection = dir => {
   let newDir;
   switch (dir) {
     case 1:
-      if (Math.random < .6) {
+      if (Math.random() < .6) {
         newDir = 1;
       } else if (randomBoolean()) {
         newDir = 3;
@@ -225,7 +249,7 @@ const changeDirection = dir => {
       }
       break;
     case 2:
-      if (Math.random < .6) {
+      if (Math.random() < .6) {
         newDir = 2;
       } else if (randomBoolean()) {
         newDir = 3;
@@ -234,7 +258,7 @@ const changeDirection = dir => {
       }
       break;
     case 3:
-      if (Math.random < .6) {
+      if (Math.random() < .6) {
         newDir = 3;
       } else if (randomBoolean()) {
         newDir = 1;
@@ -243,7 +267,7 @@ const changeDirection = dir => {
       }
       break;
     case 4:
-      if (Math.random < .6) {
+      if (Math.random() < .6) {
         newDir = 4;
       } else if (randomBoolean()) {
         newDir = 1;
@@ -300,7 +324,7 @@ const createNodeMap = map => {
   let nodeMap = Array(160).fill().map(() => Array(160));
   for (let i = 0; i < map.length; i++) {
     for (let j = 0; j < map.length; j++) {
-      nodeMap[i][j] = Node(i, j, map[i][j]);
+      nodeMap[i][j] = new Node(i, j, map[i][j]);
     }
   }
 

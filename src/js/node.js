@@ -14,10 +14,15 @@ class Node {
     return {row: this.row, col: this.col};
   }
 
+  inBounds(row, col, map) {
+    const MAX_SIZE = map.length;
+
+    return ((row < MAX_SIZE) && (col < MAX_SIZE) && (row > -1) && (col > -1));
+  }
   addNeighbors(nodeMap) {
     for (let i = this.row - 1 ; i < this.row + 2; i++) {
       for (let j = this.col - 1; j < this.col + 2; j++) {
-        if (inBounds(i, j, nodeMap)) {
+        if (this.inBounds(i, j, nodeMap)) {
           if (nodeMap[i][j].type != '0') this.neighbors.push(nodeMap[i][j]);
         }
       }
@@ -30,11 +35,6 @@ class Node {
     return 0;
   }
 
-  inBounds(row, col, map) {
-    const MAX_SIZE = map.length;
-
-    return ((row < MAX_SIZE) && (col < MAX_SIZE) && (row > -1) && (col > -1));
-  }
 
   travelCost(node) {
     
