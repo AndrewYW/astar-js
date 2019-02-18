@@ -30,7 +30,9 @@
           <option value="uniform">Uniform Cost</option>
           <option value="astar">A* Search</option>
         </select>
+      </div>
 
+      <div class="heu-box">
         <select class="heuristics">
           <option value="blorp">Select a heuristic</option>
           <option value="euclidean">Euclidean Distance</option>
@@ -39,11 +41,11 @@
           <option value="octile">Octile Distance</option>
           <option value="euclidean-squared">Euclidean Squared Distance</option>
         </select>
-
-        <div class="slide-container">
-          <p>Weight: <span id="slider-output"></span></p>
-          <input type="range" min="1.0" max="10.0" step=".1" class="slider" id="slider"/>
-        </div>
+      </div>
+      
+      <div class="slide-container">
+        <p>Weight: <span id="slider-output"></span></p>
+        <input type="range" min="1.0" max="10.0" step=".1" class="slider" id="slider"/>
       </div>
 
       <div class="solve-box">

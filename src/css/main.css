@@ -1,8 +1,18 @@
+@font-face {
+  font-family: "Android-7";
+  src: url('../fonts/android_7.ttf') format('truetype');
+}
+
 body {
+  font-family: "Android-7";
   background-color: #824c71;
   box-sizing: border-box;
   color: #dccca3;
   text-align: center;
+}
+
+body h1, body h2 {
+  font-family: "Android-7";
 }
 
 #canvas {
@@ -25,22 +35,39 @@ body {
   height: 800px;
 }
 
-.algs-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.algorithms {
-  margin: 12px;
-}
-
-.heuristics {
-  margin: 12px;
+.algorithms, .heuristics {
+  background: #dccca3;
+  border: none;
+  font-size: 16px;
+  height: 32px;
+  padding: 5px;
+  width: 100%;
+  border-radius: 5px;
 }
 
 .solve-box {
 
+}
+
+#solve-button, #create-button {
+  font-family: "Android-7";
+  background-color: #dccca3;
+  border-radius: 4px;
+  opacity: .8;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+#solve-button:hover , #create-button:hover {
+  opacity: 1;
 }
 
 .stats-box {
@@ -50,6 +77,10 @@ body {
 
 .slide-container {
   padding: 10px;
+}
+
+.slide-container p {
+  font-size: 18px;
 }
 
 .slider {
