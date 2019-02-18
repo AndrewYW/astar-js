@@ -17,7 +17,6 @@ export const generateMap = (centerCount, pathCount, blockRate, minDist) => {
     highways,
     blocked
   };
-  debugger;
   return result;
 }
 

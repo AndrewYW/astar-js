@@ -31,7 +31,7 @@ body h2 {
 .options-bar {
   display: flex;
   flex-direction: column;
-  height: 800px;
+  height: 1000px;
   justify-content: space-between;
   margin: 20px;
 }
@@ -47,10 +47,18 @@ body h2 {
   width: 100%;
 }
 
+.generate-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .solve-box {}
 
 #solve-button,
-#create-button {
+#create-button,
+#random-button {
   -webkit-transition-duration: 0.4s;
   background-color: #dccca3;
   border-radius: 4px;
@@ -68,13 +76,19 @@ body h2 {
 }
 
 #solve-button:hover,
-#create-button:hover {
+#create-button:hover,
+#random-button:hover {
   opacity: 1;
 }
 
+#create-button, #random-button {
+  
+}
+
+
 .stats-box {
   border-style: double;
-  min-height: 200px;
+  min-height: 100px;
 }
 
 .slide-container {
