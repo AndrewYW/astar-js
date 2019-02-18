@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" type="image/ico" href="./src/img/favicon.ico">
+  <link rel="stylesheet" href="./src/css/main.css">
   <script src="./dist/bundle.js"></script>
-  <title>Heuristic Pathfinder</title>
+  <title>A* Pathfinder</title>
 </head>
 <body>
-  <h1>Heuristic Pathfinder</h1>
+  <h1>A* Pathfinder</h1>
 
   <div class="content">
     <div class="map">
@@ -23,19 +25,25 @@
 
       <div class="algs-box">
         <select class="algorithms">
-          <option value="Select an algorithm">Select an algorithm</option>
+          <option value="bloop">Select an algorithm</option>
           <option value="bfs">Breadth First Search</option>
           <option value="uniform">Uniform Cost</option>
           <option value="astar">A* Search</option>
         </select>
 
         <select class="heuristics">
+          <option value="blorp">Select a heuristic</option>
           <option value="euclidean">Euclidean Distance</option>
           <option value="manhattan">Manhattan Distance</option>
           <option value="chebyshev">Chebyshev Distance</option>
           <option value="octile">Octile Distance</option>
           <option value="euclidean-squared">Euclidean Squared Distance</option>
         </select>
+
+        <div class="slide-container">
+          <p>Weight: <span id="slider-output"></span></p>
+          <input type="range" min="1.0" max="10.0" step=".1" class="slider" id="slider"/>
+        </div>
       </div>
 
       <div class="solve-box">
@@ -44,6 +52,15 @@
 
       <div class="stats-box">
         <p>STATS BOX</p>
+      </div>
+
+      
+      <div class="links">
+        <ul>
+          <li><a href="https://github.com/AndrewYW"><img src="./src/img/github.png" id="github" alt="github"></a></li>
+          <li><a href="https://linkedin.com/in/andrewyw/"><img src="./src/img/linkedin.png" id="linkedin" alt="linkedin"></a></li>
+        </ul>
+        <h2><a href="http://www.andrewyw.me/portfolio/home">Back to Portfolio</a></h2>
       </div>
     </div>
   </div>
