@@ -4,20 +4,21 @@
 }
 
 body {
-  font-family: "Android-7";
   background-color: #824c71;
   box-sizing: border-box;
   color: #dccca3;
+  font-family: "Android-7";
   text-align: center;
 }
 
-body h1, body h2 {
+body h1,
+body h2 {
   font-family: "Android-7";
 }
 
 #canvas {
-  margin: 12px;
   border-style: double;
+  margin: 12px;
 }
 
 .content {
@@ -30,49 +31,50 @@ body h1, body h2 {
 .options-bar {
   display: flex;
   flex-direction: column;
+  height: 800px;
   justify-content: space-between;
   margin: 20px;
-  height: 800px;
 }
 
-.algorithms, .heuristics {
+.algorithms,
+.heuristics {
   background: #dccca3;
   border: none;
+  border-radius: 5px;
   font-size: 16px;
   height: 32px;
   padding: 5px;
   width: 100%;
-  border-radius: 5px;
 }
 
-.solve-box {
+.solve-box {}
 
-}
-
-#solve-button, #create-button {
-  font-family: "Android-7";
+#solve-button,
+#create-button {
+  -webkit-transition-duration: 0.4s;
   background-color: #dccca3;
   border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Android-7";
+  font-size: 16px;
+  margin: 4px 2px;
   opacity: .8;
   padding: 16px 32px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  -webkit-transition-duration: 0.4s;
-  /* Safari */
   transition-duration: 0.4s;
-  cursor: pointer;
+  /* Safari */
 }
 
-#solve-button:hover , #create-button:hover {
+#solve-button:hover,
+#create-button:hover {
   opacity: 1;
 }
 
 .stats-box {
-  min-height: 200px;
   border-style: double;
+  min-height: 200px;
 }
 
 .slide-container {
@@ -85,12 +87,12 @@ body h1, body h2 {
 
 .slider {
   -webkit-appearance: none;
-  width: 100%;
-  height: 10px;
-  border-radius: 5px;
-  opacity: .7;
   -webkit-transition: .2s;
+  border-radius: 5px;
+  height: 10px;
+  opacity: .7;
   transition: opacity .2s;
+  width: 100%;
 }
 
 .slider:hover {
@@ -100,43 +102,45 @@ body h1, body h2 {
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
+  background: #afd2e9;
   border: 1px black;
-  background: #afd2e9;
-  cursor: pointer;
-}
-.slider::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
   border-radius: 50%;
-  background: #afd2e9;
   cursor: pointer;
+  height: 15px;
+  width: 15px;
+}
+
+.slider::-moz-range-thumb {
+  background: #afd2e9;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
 }
 
 .links {
-  width: 100%;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 
 .links ul {
-  position: relative;
-  text-align: center;
   list-style: none;
   padding: 12px;
+  position: relative;
+  text-align: center;
 }
 
 .links ul li {
-  position: relative;
   display: inline-block;
-  margin: 12px; 
+  margin: 12px;
+  padding: 10px;
+  position: relative;
   text-align: center;
   width: 50px;
-  padding: 10px;
 }
 
-#github, #linkedin {
+#github,
+#linkedin {
   width: 50px;
 }
