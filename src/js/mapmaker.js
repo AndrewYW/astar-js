@@ -1,12 +1,12 @@
 import Node from './node';
 
-export const generateMap = (centerCount, pathCount, blockRate) => {
+export const generateMap = (centerCount, pathCount, blockRate, minDist) => {
   let map = Array(160).fill().map(() => Array(160).fill('1'));
   let hardCoordinates = setHards(map, centerCount);
   let highways = setHighways(map, pathCount);
   let blocked = setBlocked(map, blockRate); 
   let nodeMap = createNodeMap(map);
-  let { startNode, endNode } = createNodePoints(nodeMap);
+  let { startNode, endNode } = createNodePoints(nodeMap, minDist);
 
   const result = {  
     map,
@@ -17,6 +17,7 @@ export const generateMap = (centerCount, pathCount, blockRate) => {
     highways,
     blocked
   };
+  debugger;
   return result;
 }
 
@@ -24,9 +25,9 @@ export const generateRandomMap = () => {
   const centerCount = Math.floor(Math.random() * 16);
   const pathCount = Math.floor(Math.random() * 12);
   const blockRate = Math.random() * .3;
+  const minDist = Math.floor(Math.random() * (150 - 50 + 1)) + 50;
 
-  const result = generateMap(centerCount, pathCount, blockRate);
-  debugger;
+  const result = generateMap(centerCount, pathCount, blockRate, minDist);
   return result;
 }
 
@@ -38,11 +39,11 @@ const randomBoolean = () => {
   return (Math.random() < .5);
 }
 
-const euclidDistance = (xRow, xCol, yRow, yCol) => {
+const euclidDistance = (xRow, xCol, yRow, yCol, minDist) => {
   const a = Math.pow((xRow - yRow), 2);
   const b = Math.pow((xCol - yCol), 2);
 
-  return !(Math.sqrt(a+b) < 100);
+  return !(Math.sqrt(a+b) < minDist);
 }
 
 const inBounds = (row, col, size) => {
@@ -293,20 +294,20 @@ const setBlocked = (map, blockRate) => {
   return blocked;
 };
 
-const createNodePoints = nodeMap => {
+const createNodePoints = (nodeMap, minDist) => {
   let startRow = 0;
   let startCol = 0;
   let endRow = 0;
   let endCol = 0;
-  while (!euclidDistance(startRow, startCol, endRow, endCol)) {
-    startRow = randomInt(20);
-    startCol = randomInt(20);
-    if (randomBoolean()) startRow += (nodeMap.length - 20);
-    if (randomBoolean()) startCol += (nodeMap.length - 20);
-    endRow = randomInt(20);
-    endCol = randomInt(20);
-    if (randomBoolean()) endRow += (nodeMap.length - 20);
-    if (randomBoolean()) endCol += (nodeMap.length - 20);
+  while (!euclidDistance(startRow, startCol, endRow, endCol, minDist)) {
+    startRow = randomInt(160);
+    startCol = randomInt(160);
+    // if (randomBoolean()) startRow += (nodeMap.length - 160);
+    // if (randomBoolean()) startCol += (nodeMap.length - 160);
+    endRow = randomInt(160);
+    endCol = randomInt(160);
+    // if (randomBoolean()) endRow += (nodeMap.length - 160);
+    // if (randomBoolean()) endCol += (nodeMap.length - 160);
   }
   
   return { startNode: nodeMap[startRow][startCol],
