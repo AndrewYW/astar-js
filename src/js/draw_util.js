@@ -8,35 +8,23 @@ export const clearTerrain = ctx => {
 };
 
 export const drawMap = (ctx, map) => {
-  // const nodes = map.nodeMap;
-
-  // for (let i = 0; i < nodes.length; i++) {
-  //   for( let j = 0; j < nodes.length; j++) {
-  //     drawNode(ctx, nodes[i][j]);
-  //   }
-  // }
   clearTerrain(ctx);
-  console.log("Setting Hard coords");
   var offset = 0;
+
   map.hardCoordinates.forEach(coord => {
     setTimeout(function(){ drawTerrain(ctx, coord, '#708090')}, offset);
     offset += 1;
   })
   
-  console.log("Setting highways");
-
   map.highways.forEach(coord => {
     setTimeout(function(){drawTerrain(ctx, coord, '#00FFFF')}, offset);
     offset += 5;
-
   })
-  console.log("Setting Blocked Coords");
 
   map.blocked.forEach(coord => {
     setTimeout(function(){drawTerrain(ctx, coord, '#2f4f4f')}, offset);
     // offset += 1;
-
-  })
+  });
 
 }
 

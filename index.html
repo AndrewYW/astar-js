@@ -9,8 +9,43 @@
 </head>
 <body>
   <h1>Heuristic Pathfinder</h1>
-  <canvas id="canvas" width="800" height="800"></canvas>
 
-  
+  <div class="content">
+    <div class="map">
+      <canvas id="canvas" width="800" height="800"></canvas>
+    </div>
+
+    <div class="options-bar">
+
+      <div class="generate-box">
+        <button type="button" id="create-button">Create Random Map!</button>
+      </div>
+
+      <div class="algs-box">
+        <select class="algorithms">
+          <option value="Select an algorithm">Select an algorithm</option>
+          <option value="bfs">Breadth First Search</option>
+          <option value="uniform">Uniform Cost</option>
+          <option value="astar">A* Search</option>
+        </select>
+
+        <select class="heuristics">
+          <option value="euclidean">Euclidean Distance</option>
+          <option value="manhattan">Manhattan Distance</option>
+          <option value="chebyshev">Chebyshev Distance</option>
+          <option value="octile">Octile Distance</option>
+          <option value="euclidean-squared">Euclidean Squared Distance</option>
+        </select>
+      </div>
+
+      <div class="solve-box">
+        <button type="button" id="solve-button">Solve!</button>
+      </div>
+
+      <div class="stats-box">
+        <p>STATS BOX</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

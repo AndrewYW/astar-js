@@ -111,35 +111,23 @@ const clearTerrain = ctx => {
 };
 
 const drawMap = (ctx, map) => {
-  // const nodes = map.nodeMap;
-
-  // for (let i = 0; i < nodes.length; i++) {
-  //   for( let j = 0; j < nodes.length; j++) {
-  //     drawNode(ctx, nodes[i][j]);
-  //   }
-  // }
   clearTerrain(ctx);
-  console.log("Setting Hard coords");
   var offset = 0;
+
   map.hardCoordinates.forEach(coord => {
     setTimeout(function(){ drawTerrain(ctx, coord, '#708090')}, offset);
     offset += 1;
   })
   
-  console.log("Setting highways");
-
   map.highways.forEach(coord => {
     setTimeout(function(){drawTerrain(ctx, coord, '#00FFFF')}, offset);
     offset += 5;
-
   })
-  console.log("Setting Blocked Coords");
 
   map.blocked.forEach(coord => {
     setTimeout(function(){drawTerrain(ctx, coord, '#2f4f4f')}, offset);
     // offset += 1;
-
-  })
+  });
 
 }
 
@@ -199,29 +187,24 @@ const SIZE = 800;
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
+  const random = document.getElementById("create-button")
   canvas.width = SIZE;
   canvas.height = SIZE;
   const ctx = canvas.getContext("2d");
+
+  random.onclick = function() { 
+    createRandomMap(ctx); 
+    random.innerHTML = "Create another map!"
+  };
   
-
-
-  //TEST
-  window.ctx = ctx;
-  window.generateMap = _mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"];
-
-  // const mapObject = generateMap();
-  window.clearTerrain = _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"];
-  window.drawMap = _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"];
-
-  // ctx.fillStyle = "#66cD00";
-  // ctx.fillRect(0, 0, 800, 800);
-
-  const map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"])();
-  console.log(map)
-  // debugger;
-
-  _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map);
+  _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"](ctx);
+  
 });
+
+function createRandomMap(ctx) {
+  const map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"])();
+  _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map);
+}
 
 /***/ }),
 
@@ -421,7 +404,6 @@ const makePath = (map, highways, { startCoords, border } ) => {
         if (inBounds(coords.row, coords.col, map.length)) {
           path.push(coords);
         } else {
-          // debugger
           return (path.length > 99 ? path : null);
         }
       } else {
@@ -452,21 +434,6 @@ const makePath = (map, highways, { startCoords, border } ) => {
 }
 
 const hasCoords = (highways, path, {row, col}) => {
-  // highways.forEach(coord => {
-  //   if (coord.row === row && coord.col === col) return true;
-  // });
-  // path.forEach(coord => {
-  //   if (coord.row === row && coord.col === col) return true;
-  // });
-
-  // return false;
-
-  // for (let i = 0; i < highways.length; i++) {
-  //   if (highways[i] === coord) return true;
-  // }
-  // for (let i = 0; i < path.length; i++) {
-  //   if (path[i] === coord) return true;
-  // }
 
   if (highways.some(el => el.row === row && el.col === col)) return true;
   if (path.some(el => el.row === row && el.col === col)) return true;

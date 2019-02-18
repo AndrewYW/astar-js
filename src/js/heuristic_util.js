@@ -16,7 +16,7 @@ export const manhattan = (start_node, end_node) => {
 
 // Chebyshev and Octile heuristics
 export const diagonal = (start_node, end_node, heuristic) => {
-  const cost = (heuristic === "Chebyshev" ? 1 : Math.sqrt(2));
+  const cost = (heuristic === "chebyshev" ? 1 : Math.sqrt(2));
 
   const x = Math.abs(start_node.row - end_node.row);
   const y = Math.abs(start_node.col - end_node.col);

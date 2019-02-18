@@ -5,26 +5,21 @@ export const SIZE = 800;
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
+  const random = document.getElementById("create-button")
   canvas.width = SIZE;
   canvas.height = SIZE;
   const ctx = canvas.getContext("2d");
+
+  random.onclick = function() { 
+    createRandomMap(ctx); 
+    random.innerHTML = "Create another map!"
+  };
   
-
-
-  //TEST
-  window.ctx = ctx;
-  window.generateMap = generateMap;
-
-  // const mapObject = generateMap();
-  window.clearTerrain = DrawUtil.clearTerrain;
-  window.drawMap = DrawUtil.drawMap;
-
-  // ctx.fillStyle = "#66cD00";
-  // ctx.fillRect(0, 0, 800, 800);
-
-  const map = generateMap();
-  console.log(map)
-  // debugger;
-
-  DrawUtil.drawMap(ctx, map);
+  DrawUtil.clearTerrain(ctx);
+  
 });
+
+function createRandomMap(ctx) {
+  const map = generateMap();
+  DrawUtil.drawMap(ctx, map);
+}

@@ -183,7 +183,6 @@ const makePath = (map, highways, { startCoords, border } ) => {
         if (inBounds(coords.row, coords.col, map.length)) {
           path.push(coords);
         } else {
-          // debugger
           return (path.length > 99 ? path : null);
         }
       } else {
@@ -214,21 +213,6 @@ const makePath = (map, highways, { startCoords, border } ) => {
 }
 
 const hasCoords = (highways, path, {row, col}) => {
-  // highways.forEach(coord => {
-  //   if (coord.row === row && coord.col === col) return true;
-  // });
-  // path.forEach(coord => {
-  //   if (coord.row === row && coord.col === col) return true;
-  // });
-
-  // return false;
-
-  // for (let i = 0; i < highways.length; i++) {
-  //   if (highways[i] === coord) return true;
-  // }
-  // for (let i = 0; i < path.length; i++) {
-  //   if (path[i] === coord) return true;
-  // }
 
   if (highways.some(el => el.row === row && el.col === col)) return true;
   if (path.some(el => el.row === row && el.col === col)) return true;
