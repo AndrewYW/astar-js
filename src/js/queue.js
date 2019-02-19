@@ -8,7 +8,7 @@ class PriorityQueue {
     var contain = false;
 
     for (let i = 0; i < this.queue.length; i++){
-      if (this.queue[i].compareTo(node) === 1) {
+      if (this.queue[i].fVal > node.fVal) {
         this.queue.splice(i, 0, node);
         contain = true;
         break;
@@ -26,7 +26,11 @@ class PriorityQueue {
   }
 
   remove(node) {
-    var i = this.queue.indexOf(node);
+    var i = -1;
+    for(let j = 0; j < this.queue.length; j++){
+      if (this.queue[j].isEqual(node)) i = j;
+      debugger;
+    }
     if (i > -1) this.queue.splice(i, 1);
   }
 
@@ -34,13 +38,9 @@ class PriorityQueue {
     return (this.queue.length === 0);
   }
 
-  peek() {
-    return this.queue[0];
-  }
 
   includes(node) {
-    if (this.queue.some(ele => (ele.isEqual(node)))) return true;
-    return false;
+    return (this.queue.some(ele => (ele.isEqual(node))))
   }
 
 }
