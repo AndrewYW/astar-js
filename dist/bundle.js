@@ -110,7 +110,7 @@ const clearTerrain = ctx => {
   ctx.fillRect(0, 0, 800, 800);
 };
 
-const drawMap = (ctx, map) => {
+const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   clearTerrain(ctx);
   var offset = 0;
 
@@ -131,6 +131,12 @@ const drawMap = (ctx, map) => {
 
   setTimeout(function(){ drawPoints( ctx, map.startNode, map.endNode )}, offset);
 
+  setTimeout(function(){ 
+    btn.disabled = false;
+    btn2.disabled = false;
+    btn3.disabled = false;
+    btn.innerHTML = btnText;
+  }, offset+5);
 }
 
 const drawTerrain = (ctx, {row, col}, fillStyle) => {
@@ -198,8 +204,9 @@ const SIZE = 800;
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
-  const random = document.getElementById("random-button")
-  const create = document.getElementById("create-button")
+  const random = document.getElementById("random-button");
+  const create = document.getElementById("create-button");
+  const solve = document.getElementById("solve-button");
   var slider = document.getElementById("slider");
   var output = document.getElementById("slider-output");
   var pathSlider = document.getElementById("path-slider");
@@ -211,7 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
   var distSlider = document.getElementById("dist-slider");
   var distOutput = document.getElementById("dist-output");
 
-
+  pathOutput.innerHTML = pathSlider.value;
+  hardOutput.innerHTML = hardSlider.value;
+  blockOutput.innerHTML = blockSlider.value;
   output.innerHTML = slider.value;
 
 
@@ -227,32 +236,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   random.onclick = function() { 
       random.disabled = true;
-      createRandomMap(ctx);
-      random.innerHTML = "Create another map!"
-      random.disabled = false;
+      create.disabled = true;
+      solve.disabled = true;
+      random.innerHTML = "Creating...";
+      createRandomMap(ctx, random, create, solve, "Create random map!");
   };
 
   create.onclick = function() {
+    create.disabled = true;
+    random.disabled = true;
+    solve.disabled = true;
+    create.innerHTML = "Creating...";
     const centerCount = parseInt(hardOutput.innerHTML);
     const pathCount = parseInt(pathOutput.innerHTML);
     const blockRate = parseFloat(blockOutput.innerHTML / 100);
     const minDist = parseInt(distOutput.innerHTML);
-    createMap(ctx, centerCount, pathCount, blockRate, minDist);
+    createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
   }
   
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"](ctx);
   
 });
 
-function createRandomMap(ctx) {
+function createRandomMap(ctx, btn, btn2, btn3, btnText) {
   var map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateRandomMap"])();
-  _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map);
+  _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map, btn, btn2, btn3, btnText);
 }
 
-function createMap(ctx, centerCount, pathCount, blockRate, minDist) {
+function createMap(ctx, centerCount, pathCount, blockRate, minDist, btn, btn2, btn3, btnText) {
   var map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"])(centerCount, pathCount, blockRate, minDist);
-  _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map);
+  _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map, btn, btn2, btn3, btnText);
 }
+
+
 
 /***/ }),
 
@@ -292,7 +308,7 @@ const generateMap = (centerCount, pathCount, blockRate, minDist) => {
 
 const generateRandomMap = () => {
   const centerCount = Math.floor(Math.random() * 16);
-  const pathCount = Math.floor(Math.random() * 12);
+  const pathCount = Math.floor(Math.random() * 10);
   const blockRate = Math.random() * .3;
   const minDist = Math.floor(Math.random() * (150 - 50 + 1)) + 50;
 
@@ -356,7 +372,8 @@ const setHighways = (map, pathCount) => {
   let paths = 0;
 
   while(paths < pathCount) {
-    if (tries === 50000) {
+    if (tries === 100000) {
+      console.log(`try count: ${tries}`)
       highways = [];
       tries = 0;
     } else {

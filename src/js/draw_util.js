@@ -7,7 +7,7 @@ export const clearTerrain = ctx => {
   ctx.fillRect(0, 0, 800, 800);
 };
 
-export const drawMap = (ctx, map) => {
+export const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   clearTerrain(ctx);
   var offset = 0;
 
@@ -28,6 +28,12 @@ export const drawMap = (ctx, map) => {
 
   setTimeout(function(){ drawPoints( ctx, map.startNode, map.endNode )}, offset);
 
+  setTimeout(function(){ 
+    btn.disabled = false;
+    btn2.disabled = false;
+    btn3.disabled = false;
+    btn.innerHTML = btnText;
+  }, offset+5);
 }
 
 export const drawTerrain = (ctx, {row, col}, fillStyle) => {

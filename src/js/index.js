@@ -5,8 +5,9 @@ export const SIZE = 800;
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
-  const random = document.getElementById("random-button")
-  const create = document.getElementById("create-button")
+  const random = document.getElementById("random-button");
+  const create = document.getElementById("create-button");
+  const solve = document.getElementById("solve-button");
   var slider = document.getElementById("slider");
   var output = document.getElementById("slider-output");
   var pathSlider = document.getElementById("path-slider");
@@ -18,7 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
   var distSlider = document.getElementById("dist-slider");
   var distOutput = document.getElementById("dist-output");
 
-
+  pathOutput.innerHTML = pathSlider.value;
+  hardOutput.innerHTML = hardSlider.value;
+  blockOutput.innerHTML = blockSlider.value;
   output.innerHTML = slider.value;
 
 
@@ -34,29 +37,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   random.onclick = function() { 
       random.disabled = true;
-      createRandomMap(ctx);
-      random.innerHTML = "Create another map!"
-      random.disabled = false;
+      create.disabled = true;
+      solve.disabled = true;
+      random.innerHTML = "Creating...";
+      createRandomMap(ctx, random, create, solve, "Create random map!");
   };
 
   create.onclick = function() {
+    create.disabled = true;
+    random.disabled = true;
+    solve.disabled = true;
+    create.innerHTML = "Creating...";
     const centerCount = parseInt(hardOutput.innerHTML);
     const pathCount = parseInt(pathOutput.innerHTML);
     const blockRate = parseFloat(blockOutput.innerHTML / 100);
     const minDist = parseInt(distOutput.innerHTML);
-    createMap(ctx, centerCount, pathCount, blockRate, minDist);
+    createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
   }
   
   DrawUtil.clearTerrain(ctx);
   
 });
 
-function createRandomMap(ctx) {
+function createRandomMap(ctx, btn, btn2, btn3, btnText) {
   var map = generateRandomMap();
-  DrawUtil.drawMap(ctx, map);
+  DrawUtil.drawMap(ctx, map, btn, btn2, btn3, btnText);
 }
 
-function createMap(ctx, centerCount, pathCount, blockRate, minDist) {
+function createMap(ctx, centerCount, pathCount, blockRate, minDist, btn, btn2, btn3, btnText) {
   var map = generateMap(centerCount, pathCount, blockRate, minDist);
-  DrawUtil.drawMap(ctx, map);
+  DrawUtil.drawMap(ctx, map, btn, btn2, btn3, btnText);
 }
+

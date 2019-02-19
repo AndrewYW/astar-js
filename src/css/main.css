@@ -4,6 +4,9 @@
 }
 
 body {
+  /* display: flex;
+  justify-content: center; */
+  align-items: center;
   background-color: #824c71;
   box-sizing: border-box;
   color: #dccca3;
@@ -24,14 +27,17 @@ body h2 {
 .content {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: center;
   max-width: 1600px;
+  margin: 20px;
 }
 
 .options-bar {
   display: flex;
   flex-direction: column;
-  height: 1000px;
+  height: 100%;
+  /* min-width: 100%; */
   justify-content: space-between;
   margin: 20px;
 }
@@ -82,10 +88,11 @@ body h2 {
 }
 
 #create-button, #random-button {
-  
 }
 
-
+.algs-box, .heu-box {
+  margin-top: 5px;
+}
 .stats-box {
   border-style: double;
   min-height: 100px;

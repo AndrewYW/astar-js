@@ -22,7 +22,7 @@ export const generateMap = (centerCount, pathCount, blockRate, minDist) => {
 
 export const generateRandomMap = () => {
   const centerCount = Math.floor(Math.random() * 16);
-  const pathCount = Math.floor(Math.random() * 12);
+  const pathCount = Math.floor(Math.random() * 10);
   const blockRate = Math.random() * .3;
   const minDist = Math.floor(Math.random() * (150 - 50 + 1)) + 50;
 
@@ -86,7 +86,8 @@ const setHighways = (map, pathCount) => {
   let paths = 0;
 
   while(paths < pathCount) {
-    if (tries === 50000) {
+    if (tries === 100000) {
+      console.log(`try count: ${tries}`)
       highways = [];
       tries = 0;
     } else {
