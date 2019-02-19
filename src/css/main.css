@@ -2,7 +2,10 @@
   font-family: "Android-7";
   src: url('../fonts/android_7.ttf') format('truetype');
 }
-
+a, a:hover, a:visited {
+  text-decoration: none;
+  color: #dccca3;
+}
 body {
   /* display: flex;
   justify-content: center; */

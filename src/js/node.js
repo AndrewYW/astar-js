@@ -16,6 +16,14 @@ class Node {
               this.col === node.col);
   }
 
+  isMemberOf(array) {
+    array.forEach(element => {
+      if (this.isEqual(element)) return true;
+    });
+
+    return false;
+  }
+
   inBounds(row, col, map) {
     const MAX_SIZE = map.length;
 

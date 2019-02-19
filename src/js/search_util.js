@@ -5,11 +5,42 @@ class AStarSearch {
     this.endNode = endNode;
     this.weight = weight;
     this.fringe_size = 0;
-    this.fringe = new PriorityQueue();
+    this.fringe;
+    
   }
 
   solve() {
+    this.fringe = new PriorityQueue();
+    this.closed = [];
 
+    this.startNode.gVal = 0;
+    this.startNode.parent = this.startNode;
+
+    this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * this.weight);
+    this.fringe.enqueue(this.startNode);
+
+    while(!this.fringe.isEmpty()) {
+      currentNode = this.fringe.dequeue();
+
+      if (currentNode.isEqual(this.endNode)) {
+        return true;
+      }
+
+      this.closed.push(currentNode);
+
+      currentNode.neighbors.forEach(neighbor => {
+        if (!neighbor.isMemberOf(this.closed)) {
+          if (!this.fringe.includes(neighbor)){
+            neighbor.gVal = Number.MAX_SAFE_INTEGER;
+            neighbor.parent = undefined;
+          }
+
+          updateNode(currentNode, neighbor);
+        }
+      });
+    }
+
+    return false;
   }
 
   updateNode(currentNode, neighbor) {
