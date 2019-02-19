@@ -1,5 +1,5 @@
 //Euclidean and Euclidean squared distance
-export const euclidean = (startNode, endNode, heuristic) => {
+const euclidean = (startNode, endNode, heuristic) => {
   const a = Math.pow(startNode.row - endNode.row, 2);
   const b = Math.pow(startNode.col - endNode.col, 2);
 
@@ -7,7 +7,7 @@ export const euclidean = (startNode, endNode, heuristic) => {
 }
 
 //Manhattan distance
-export const manhattan = (startNode, endNode) => {
+const manhattan = (startNode, endNode) => {
   const x = startNode.row - endNode.row;
   const y = startNode.col - endNode.col;
 
@@ -15,7 +15,7 @@ export const manhattan = (startNode, endNode) => {
 }
 
 // Chebyshev and Octile heuristics
-export const diagonal = (startNode, endNode, heuristic) => {
+const diagonal = (startNode, endNode, heuristic) => {
   const cost = (heuristic === "chebyshev" ? 1 : Math.sqrt(2));
 
   const x = Math.abs(startNode.row - endNode.row);
