@@ -67,8 +67,21 @@ export const drawNode = (ctx, node) => {
   ctx.fillRect(x, y, 5, 5);
 };
 
-export const drawPath = (ctx, node) => {
+export const drawPath = (ctx, startNode, endNode) => {
+  var currentNode = endNode;
+  var nodeList = [];
 
+  while(typeof currentNode != startNode) {
+    nodeList.unshift(currentNode);
+    currentNode = currentNode.parent;
+  }
+
+  nodeList.unshift(startNode);
+
+  nodeList.forEach(node => {
+    drawTerrain(ctx, {row: node.row, col: node.col}, "yellow");
+  });
+  
 }
 
 const drawPoints = (ctx, start, end) => {

@@ -4,12 +4,16 @@ class AStarSearch {
     this.startNode = startNode;
     this.endNode = endNode;
     this.weight = weight;
-    this.fringe_size = 0;
+    this.size = 0;
     this.fringe;
     
   }
 
   solve() {
+    var startTime = Date.now();
+    var updateTime = setInterval(function(){ 
+      document.getElementById("timer").innerHTML = Date.now() - startTime
+    }, 1);
     this.fringe = new PriorityQueue();
     this.closed = [];
 
@@ -23,10 +27,12 @@ class AStarSearch {
       currentNode = this.fringe.dequeue();
 
       if (currentNode.isEqual(this.endNode)) {
+        clearInterval(updateTime);
         return true;
       }
 
       this.closed.push(currentNode);
+      this.size = this.closed.length;
 
       currentNode.neighbors.forEach(neighbor => {
         if (!neighbor.isMemberOf(this.closed)) {
@@ -39,7 +45,7 @@ class AStarSearch {
         }
       });
     }
-
+    clearInterval(updateTime);
     return false;
   }
 
@@ -55,6 +61,9 @@ class AStarSearch {
       this.fringe.enqueue(neighbor);
     }
   }
+
 }
+
+
 
 export default AStarSearch;
