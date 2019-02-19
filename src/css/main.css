@@ -22,9 +22,18 @@ body h2 {
   font-family: "Android-7";
 }
 
-#canvas {
+.map{
+  position: relative;
+  width: 800px;
+  height: 800px;
+
+}
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
   border-style: double;
-  margin: 12px;
+  /* margin: 12px; */
 }
 
 .content {
@@ -50,7 +59,7 @@ body h2 {
   background: #dccca3;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;
   height: 32px;
   padding: 5px;
   width: 100%;
@@ -74,10 +83,12 @@ body h2 {
   cursor: pointer;
   display: inline-block;
   font-family: "Android-7";
-  font-size: 16px;
+  font-size: 14px;
   margin: 4px 2px;
   opacity: .8;
   padding: 16px 32px;
+  width: 180px;
+  height: 65px;
   text-align: center;
   text-decoration: none;
   transition-duration: 0.4s;
@@ -106,7 +117,7 @@ body h2 {
 }
 
 .slide-container p {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .slider {

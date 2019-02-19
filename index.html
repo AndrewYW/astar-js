@@ -15,6 +15,7 @@
   <div class="content">
     <div class="map">
       <canvas id="canvas" width="800" height="800"></canvas>
+      <canvas id="canvas2" width="800" height="800"></canvas>
     </div>
 
     <div class="options-bar">
@@ -73,7 +74,12 @@
       </div>
 
       <div class="stats-box">
-        <p>STATS BOX</p>
+        <p>Map size: 25600 Nodes</p>
+        <p>Nodes explored: <span id="size-count">0</span></p>
+        <p>Map Coverage: <span id="size-percent">0</span>%</p>
+
+        <p>Time Elapsed (ms): <span id="timer"></span></p>
+
       </div>
 
       

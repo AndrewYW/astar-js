@@ -294,16 +294,20 @@ const setBlocked = (map, blockRate) => {
   return blocked;
 };
 
+const isBlocked = (x, y, nodeMap) => {
+  return (nodeMap[x][y].type === '0');
+}
 const createNodePoints = (nodeMap, minDist) => {
   let startRow = 0;
   let startCol = 0;
   let endRow = 0;
   let endCol = 0;
-  while (!euclidDistance(startRow, startCol, endRow, endCol, minDist)) {
+  while (!euclidDistance(startRow, startCol, endRow, endCol, minDist) || (isBlocked(startRow, startCol, nodeMap) || isBlocked(endRow, endCol, nodeMap))) {
     startRow = randomInt(160);
     startCol = randomInt(160);
     endRow = randomInt(160);
     endCol = randomInt(160);
+
   }
   
   return { startNode: nodeMap[startRow][startCol],

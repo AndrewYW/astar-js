@@ -90,19 +90,21 @@
 /*!*****************************!*\
   !*** ./src/js/draw_util.js ***!
   \*****************************/
-/*! exports provided: fadeBlack, clearTerrain, drawMap, drawTerrain, drawNode, drawPath */
+/*! exports provided: fillBlack, clearTerrain, drawMap, clearNode, drawTerrain, drawNode, drawPath */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fadeBlack", function() { return fadeBlack; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fillBlack", function() { return fillBlack; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearTerrain", function() { return clearTerrain; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawMap", function() { return drawMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearNode", function() { return clearNode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawTerrain", function() { return drawTerrain; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawNode", function() { return drawNode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawPath", function() { return drawPath; });
-const fadeBlack = ctx => {
-
+const fillBlack = ctx => {
+  ctx.fillStyle = "black";
+  ctx.fillRect(0,0,800,800);
 };
 
 const clearTerrain = ctx => {
@@ -139,10 +141,16 @@ const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   }, offset+5);
 }
 
+const clearNode = (ctx, {row, col}) => {
+  const x = row * 5;
+  const y = col * 5;
+
+  ctx.clearRect( x, y, 5, 5);
+}
 const drawTerrain = (ctx, {row, col}, fillStyle) => {
   ctx.fillStyle = fillStyle;
-  const x = row * 5
-  const y = col * 5;
+  const y = row * 5
+  const x = col * 5;
 
   ctx.fillRect( x, y, 5, 5 );
 };
@@ -184,7 +192,7 @@ const drawPath = (ctx, startNode, endNode) => {
   nodeList.forEach(node => {
     drawTerrain(ctx, {row: node.row, col: node.col}, "yellow");
   });
-  
+
 }
 
 const drawPoints = (ctx, start, end) => {
@@ -217,6 +225,7 @@ const SIZE = 800;
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
+  const canvas2 = document.getElementById("canvas2");
   const random = document.getElementById("random-button");
   const create = document.getElementById("create-button");
   const solve = document.getElementById("solve-button");
@@ -230,16 +239,16 @@ document.addEventListener("DOMContentLoaded", () => {
   var blockOutput = document.getElementById("block-output");
   var distSlider = document.getElementById("dist-slider");
   var distOutput = document.getElementById("dist-output");
+  canvas.width = SIZE;
+  canvas.height = SIZE;
+  const ctx = canvas.getContext("2d");
+  const ctx2 = canvas2.getContext("2d");
 
   pathOutput.innerHTML = pathSlider.value;
   hardOutput.innerHTML = hardSlider.value;
   blockOutput.innerHTML = blockSlider.value;
+  distOutput.innerHTML = distSlider.value;
   output.innerHTML = slider.value;
-
-
-  canvas.width = SIZE;
-  canvas.height = SIZE;
-  const ctx = canvas.getContext("2d");
 
   slider.oninput = function() { output.innerHTML = this.value; }
   pathSlider.oninput = function() { pathOutput.innerHTML = this.value; }
@@ -247,12 +256,27 @@ document.addEventListener("DOMContentLoaded", () => {
   hardSlider.oninput = function() { hardOutput.innerHTML = this.value; }
   distSlider.oninput = function() { distOutput.innerHTML = this.value; }
 
+  canvas.style.zIndex = 1;
+  canvas2.style.zIndex = -1;
+  canvas.onclick = function () {
+    swapZIndex(canvas, canvas2)
+  };
+  canvas2.onclick = function () {
+    swapZIndex(canvas2, canvas)
+  };
+
+  _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"](ctx);
+  _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
+
+  var map;
   random.onclick = function() { 
       random.disabled = true;
       create.disabled = true;
       solve.disabled = true;
       random.innerHTML = "Creating...";
-      createRandomMap(ctx, random, create, solve, "Create random map!");
+      map = createRandomMap(ctx, random, create, solve, "Create random map!");
+
+      console.log(map);
   };
 
   create.onclick = function() {
@@ -264,24 +288,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathCount = parseInt(pathOutput.innerHTML);
     const blockRate = parseFloat(blockOutput.innerHTML / 100);
     const minDist = parseInt(distOutput.innerHTML);
-    createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
+    debugger;
+    map = createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
+
+    console.log(map);
   }
+
+  solve.onclick = function() { solveMap() };
+
   
-  _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"](ctx);
   
 });
+
+function swapZIndex(canvas, canvas2) {
+  canvas2.style.zIndex = [canvas.style.zIndex, canvas.style.zIndex = canvas2.style.zIndex][0];
+}
 
 function createRandomMap(ctx, btn, btn2, btn3, btnText) {
   var map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateRandomMap"])();
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map, btn, btn2, btn3, btnText);
+  
+  return map;
 }
 
 function createMap(ctx, centerCount, pathCount, blockRate, minDist, btn, btn2, btn3, btnText) {
   var map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"])(centerCount, pathCount, blockRate, minDist);
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map, btn, btn2, btn3, btnText);
+
+  return map;
 }
 
+function solveMap() {
 
+}
 
 /***/ }),
 
@@ -593,16 +632,20 @@ const setBlocked = (map, blockRate) => {
   return blocked;
 };
 
+const isBlocked = (x, y, nodeMap) => {
+  return (nodeMap[x][y].type === '0');
+}
 const createNodePoints = (nodeMap, minDist) => {
   let startRow = 0;
   let startCol = 0;
   let endRow = 0;
   let endCol = 0;
-  while (!euclidDistance(startRow, startCol, endRow, endCol, minDist)) {
+  while (!euclidDistance(startRow, startCol, endRow, endCol, minDist) || (isBlocked(startRow, startCol, nodeMap) || isBlocked(endRow, endCol, nodeMap))) {
     startRow = randomInt(160);
     startCol = randomInt(160);
     endRow = randomInt(160);
     endCol = randomInt(160);
+
   }
   
   return { startNode: nodeMap[startRow][startCol],
@@ -658,7 +701,7 @@ class Node {
 
   isMemberOf(array) {
     array.forEach(element => {
-      if (this.isEqual(element)) return true;
+      if (this.isEqual) return true;
     });
 
     return false;
@@ -673,7 +716,7 @@ class Node {
   addNeighbors(nodeMap) {
     for (let i = this.row - 1 ; i < this.row + 2; i++) {
       for (let j = this.col - 1; j < this.col + 2; j++) {
-        if (this.inBounds(i, j, nodeMap)) {
+        if (this.inBounds(i, j, nodeMap) && !(this.row === i && this.col === j)) {
           if (nodeMap[i][j].type != '0') this.neighbors.push(nodeMap[i][j]);
         }
       }

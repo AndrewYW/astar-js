@@ -18,7 +18,7 @@ class Node {
 
   isMemberOf(array) {
     array.forEach(element => {
-      if (this.isEqual(element)) return true;
+      if (this.isEqual) return true;
     });
 
     return false;
@@ -33,7 +33,7 @@ class Node {
   addNeighbors(nodeMap) {
     for (let i = this.row - 1 ; i < this.row + 2; i++) {
       for (let j = this.col - 1; j < this.col + 2; j++) {
-        if (this.inBounds(i, j, nodeMap)) {
+        if (this.inBounds(i, j, nodeMap) && !(this.row === i && this.col === j)) {
           if (nodeMap[i][j].type != '0') this.neighbors.push(nodeMap[i][j]);
         }
       }

@@ -1,5 +1,6 @@
-export const fadeBlack = ctx => {
-
+export const fillBlack = ctx => {
+  ctx.fillStyle = "black";
+  ctx.fillRect(0,0,800,800);
 };
 
 export const clearTerrain = ctx => {
@@ -36,10 +37,16 @@ export const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   }, offset+5);
 }
 
+export const clearNode = (ctx, {row, col}) => {
+  const x = row * 5;
+  const y = col * 5;
+
+  ctx.clearRect( x, y, 5, 5);
+}
 export const drawTerrain = (ctx, {row, col}, fillStyle) => {
   ctx.fillStyle = fillStyle;
-  const x = row * 5
-  const y = col * 5;
+  const y = row * 5
+  const x = col * 5;
 
   ctx.fillRect( x, y, 5, 5 );
 };
@@ -81,7 +88,7 @@ export const drawPath = (ctx, startNode, endNode) => {
   nodeList.forEach(node => {
     drawTerrain(ctx, {row: node.row, col: node.col}, "yellow");
   });
-  
+
 }
 
 const drawPoints = (ctx, start, end) => {
