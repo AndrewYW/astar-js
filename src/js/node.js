@@ -21,6 +21,7 @@ class Node {
 
     return ((row < MAX_SIZE) && (col < MAX_SIZE) && (row > -1) && (col > -1));
   }
+
   addNeighbors(nodeMap) {
     for (let i = this.row - 1 ; i < this.row + 2; i++) {
       for (let j = this.col - 1; j < this.col + 2; j++) {

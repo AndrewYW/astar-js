@@ -1,9 +1,8 @@
 class AStarSearch {
-  constructor(start_node, end_node, weight, h_value) {
-    this.start_node = start_node;
-    this.end_node = end_node;
+  constructor(startNode, endNode, weight) {
+    this.startNode = startNode;
+    this.endNode = endNode;
     this.weight = weight;
-    this.heuristic = h_value;
     this.fringe_size = 0;
   }
 
@@ -12,7 +11,7 @@ class AStarSearch {
   }
 
   updateNode(currentNode, neighbor) {
-    
+
   }
 }
 

@@ -588,12 +588,8 @@ const createNodePoints = (nodeMap, minDist) => {
   while (!euclidDistance(startRow, startCol, endRow, endCol, minDist)) {
     startRow = randomInt(160);
     startCol = randomInt(160);
-    // if (randomBoolean()) startRow += (nodeMap.length - 160);
-    // if (randomBoolean()) startCol += (nodeMap.length - 160);
     endRow = randomInt(160);
     endCol = randomInt(160);
-    // if (randomBoolean()) endRow += (nodeMap.length - 160);
-    // if (randomBoolean()) endCol += (nodeMap.length - 160);
   }
   
   return { startNode: nodeMap[startRow][startCol],
@@ -616,6 +612,7 @@ const createNodeMap = map => {
   }
   return nodeMap;
 }
+
 
 /***/ }),
 
@@ -651,6 +648,7 @@ class Node {
 
     return ((row < MAX_SIZE) && (col < MAX_SIZE) && (row > -1) && (col > -1));
   }
+
   addNeighbors(nodeMap) {
     for (let i = this.row - 1 ; i < this.row + 2; i++) {
       for (let j = this.col - 1; j < this.col + 2; j++) {

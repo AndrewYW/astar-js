@@ -1,25 +1,49 @@
 //Euclidean and Euclidean squared distance
-export const euclidean = (start_node, end_node, heuristic) => {
-  const a = Math.pow(start_node.row - end_node.row, 2);
-  const b = Math.pow(start_node.col - end_node.col, 2);
+export const euclidean = (startNode, endNode, heuristic) => {
+  const a = Math.pow(startNode.row - endNode.row, 2);
+  const b = Math.pow(startNode.col - endNode.col, 2);
 
-  heuristic === "euclidean" ? start_node.hVal = Math.sqrt(a+b) : start_node.hVal = a + b;
+  return (heuristic === "euclidean" ? Math.sqrt(a+b) : a + b);
 }
 
 //Manhattan distance
-export const manhattan = (start_node, end_node) => {
-  const x = start_node.row - end_node.row;
-  const y = start_node.col - end_node.col;
+export const manhattan = (startNode, endNode) => {
+  const x = startNode.row - endNode.row;
+  const y = startNode.col - endNode.col;
 
-  start_node.hVal = x + y;
+  return x + y;
 }
 
 // Chebyshev and Octile heuristics
-export const diagonal = (start_node, end_node, heuristic) => {
+export const diagonal = (startNode, endNode, heuristic) => {
   const cost = (heuristic === "chebyshev" ? 1 : Math.sqrt(2));
 
-  const x = Math.abs(start_node.row - end_node.row);
-  const y = Math.abs(start_node.col - end_node.col);
+  const x = Math.abs(startNode.row - endNode.row);
+  const y = Math.abs(startNode.col - endNode.col);
 
-  start_node.hVal = (x + y) + ((cost-2) * Math.min(x, y));
+  return (x + y) + ((cost-2) * Math.min(x, y));
+}
+
+export const setHVals = (nodeMap, endNode, heuristic) => {
+  for (let i = 0; i < nodeMap.length; i++) {
+    for (let j = 0; j < nodeMap.length; j++) {
+      var node = nodeMap[i][j];
+
+      switch (heuristic) {
+        case 'euclidean':
+        case 'euclidean-squared':
+          node.hVal = euclidean(node, endNode, heuristic);
+          break;
+        case 'manhattan':
+          node.hVal = manhattan(node, endNode);
+          break;
+        case 'chebyshev':
+        case 'octile':
+          node.hVal = diagonal(node, endNode, heuristic);
+          break;
+        default:
+          console.log("No heuristic selected");
+      }
+    }
+  }
 }

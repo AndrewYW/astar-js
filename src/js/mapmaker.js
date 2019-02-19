@@ -302,12 +302,8 @@ const createNodePoints = (nodeMap, minDist) => {
   while (!euclidDistance(startRow, startCol, endRow, endCol, minDist)) {
     startRow = randomInt(160);
     startCol = randomInt(160);
-    // if (randomBoolean()) startRow += (nodeMap.length - 160);
-    // if (randomBoolean()) startCol += (nodeMap.length - 160);
     endRow = randomInt(160);
     endCol = randomInt(160);
-    // if (randomBoolean()) endRow += (nodeMap.length - 160);
-    // if (randomBoolean()) endCol += (nodeMap.length - 160);
   }
   
   return { startNode: nodeMap[startRow][startCol],
