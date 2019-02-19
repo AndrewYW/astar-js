@@ -11,7 +11,9 @@ class AStarSearch {
 
   }
 
-  
+  updateNode(currentNode, neighbor) {
+    
+  }
 }
 
 export default AStarSearch;

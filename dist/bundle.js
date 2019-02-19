@@ -640,8 +640,10 @@ class Node {
     this.parent = undefined;
   }
 
-  coordinates() {
-    return {row: this.row, col: this.col};
+  isEqual(node) {
+    return ( this.type === node.type &&
+              this.row === node.row &&
+              this.col === node.col);
   }
 
   inBounds(row, col, map) {
@@ -666,7 +668,7 @@ class Node {
   }
 
 
-  travelCost(node) {
+  travelCost(targetNode) {
     
   }
 }

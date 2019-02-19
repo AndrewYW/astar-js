@@ -1,4 +1,4 @@
-# Heuristic Pathfinder
+# A* Pathfinder
 
 ## Background, Overview
 
@@ -10,7 +10,7 @@ Heuristic Pathfinder is a visualizer of several heuristic functions applied to t
 ## Functionality, MVP
 
 + Users can choose to randomly or manually generate terrain based within specific guidelines
-+ Users can specify which heuristic or algorithm to apply, with specific weighting also determinable.
++ Users can specify which heuristic or algorithm to apply, with specific weighting also determinable when applicable.
 + The grid will render the result paths on the terrain, and show time/space analysis of each used option.
 
 ## Technologies
