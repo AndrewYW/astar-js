@@ -3,11 +3,12 @@ class Node {
     this.type = type;
     this.row = row;
     this.col = col;
-    this.hVal = 0.0;
-    this.gVal = 0.0;
-    this.fVal = 0.0;
+    this.hVal;
+    this.gVal;
+    this.fVal;
     this.neighbors = [];
-    this.parent = undefined;
+    this.visited = false;
+    this.parent = null;
   }
 
   isEqual(node) {
@@ -17,8 +18,9 @@ class Node {
   }
 
   isMemberOf(array) {
+    var self = this;
     array.forEach(element => {
-      if (this.isEqual) return true;
+      if (self.row === element.row && self.col === element.col) return true;
     });
 
     return false;

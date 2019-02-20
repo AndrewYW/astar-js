@@ -8,8 +8,8 @@ const euclidean = (startNode, endNode, heuristic) => {
 
 //Manhattan distance
 const manhattan = (startNode, endNode) => {
-  const x = startNode.row - endNode.row;
-  const y = startNode.col - endNode.col;
+  const x = Math.abs(startNode.row - endNode.row);
+  const y = Math.abs(startNode.col - endNode.col);
 
   return x + y;
 }

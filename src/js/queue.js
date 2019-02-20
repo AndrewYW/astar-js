@@ -29,7 +29,6 @@ class PriorityQueue {
     var i = -1;
     for(let j = 0; j < this.queue.length; j++){
       if (this.queue[j].isEqual(node)) i = j;
-      debugger;
     }
     if (i > -1) this.queue.splice(i, 1);
   }
