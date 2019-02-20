@@ -21,22 +21,29 @@
     <div class="options-bar">
 
       <div class="slide-container">
-        <p>Mountains: <span id="hard-output"></span></p>
-        <input type="range" min="0" max="16" step="1" class="slider" id="hard-slider" />
+        <div class="slide-item">
+          <p>Mountains: <span id="hard-output"></span></p>
+          <input type="range" min="0" max="16" step="1" class="slider" id="hard-slider" />
+        </div>
+        <div class="slide-item">
+          <p>Paths: <span id="path-output"></span></p>
+          <input type="range" min="0" max="10" step="1" class="slider" id="path-slider" />
+        </div>
       </div>
+        
 
       <div class="slide-container">
-        <p>Paths: <span id="path-output"></span></p>
-        <input type="range" min="0" max="10" step="1" class="slider" id="path-slider" />
+        <div class="slide-item">
+          <p>Block Density: <span id="block-output"></span>%</p>
+          <input type="range" min="0.0" max="30.0" step=".1" class="slider" id="block-slider" />
+        </div>
+        <div class="slide-item">
+          <p>Min distance: <span id="dist-output"></span></p>
+          <input type="range" min="50" max="150" step="1" class="slider" id="dist-slider" />
+        </div>
       </div>
-
       <div class="slide-container">
-        <p>Block Density: <span id="block-output"></span></p>
-        <input type="range" min="0.0" max="30.0" step=".1" class="slider" id="block-slider" />
-      </div>
-      <div class="slide-container">
-        <p>Minimum Endpoint distance: <span id="dist-output"></span></p>
-        <input type="range" min="50" max="150" step="1" class="slider" id="dist-slider" />
+        
       </div>
 
       <div class="generate-box">
@@ -65,8 +72,10 @@
       </div>
       
       <div class="slide-container">
-        <p>Weight: <span id="slider-output"></span></p>
-        <input type="range" min="0.0" max="2.0" step=".05" class="slider" id="slider"/>
+        <div class="slide-item">
+          <p>Weight: <span id="slider-output"></span></p>
+          <input type="range" min="0.0" max="2.0" step=".05" class="slider" id="slider"/>
+        </div>
       </div>
 
       <div class="solve-box">
@@ -87,6 +96,7 @@
         <ul>
           <li><a href="https://github.com/AndrewYW"><img src="./src/img/github.png" id="github" alt="github"></a></li>
           <li><a href="https://linkedin.com/in/andrewyw/"><img src="./src/img/linkedin.png" id="linkedin" alt="linkedin"></a></li>
+          <li><a href="https://angel.co/andrewyw/"><img src="./src/img/angellist.png" id="angellist" alt="angellist"></a></li>
         </ul>
         <h2><a href="http://www.andrewyw.me/portfolio/home">Back to Portfolio</a></h2>
       </div>

@@ -2,6 +2,10 @@
   font-family: "Android-7";
   src: url('../fonts/android_7.ttf') format('truetype');
 }
+
+* {
+  box-sizing: border-box;
+}
 a, a:hover, a:visited {
   text-decoration: none;
   color: #dccca3;
@@ -13,13 +17,14 @@ body {
   background-color: #824c71;
   box-sizing: border-box;
   color: #dccca3;
-  font-family: "Android-7";
+  /* font-family: "Android-7"; */
   text-align: center;
 }
 
 body h1,
 body h2 {
   font-family: "Android-7";
+  margin-bottom: 0;
 }
 
 .map{
@@ -42,7 +47,7 @@ canvas {
   align-items: center;
   justify-content: center;
   max-width: 1600px;
-  margin: 20px;
+  /* margin: 20px; */
 }
 
 .options-bar {
@@ -109,16 +114,26 @@ canvas {
 }
 .stats-box {
   border-style: double;
-  min-height: 100px;
+  /* min-height: 100px; */
 }
 
 .slide-container {
   padding: 10px;
+  padding-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-.slide-container p {
+.slide-item {
+  width: 100%;
+  margin: 5px;
+}
+.slide-item p {
   font-size: 16px;
 }
+
 
 .slider {
   -webkit-appearance: none;
@@ -176,6 +191,7 @@ canvas {
 }
 
 #github,
-#linkedin {
-  width: 50px;
+#linkedin,
+#angellist {
+  width: 45px;
 }
