@@ -38,8 +38,8 @@ export const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
 }
 
 export const clearNode = (ctx, {row, col}) => {
-  const x = row * 5;
-  const y = col * 5;
+  const y = row * 5;
+  const x = col * 5;
 
   ctx.clearRect( x, y, 5, 5);
 }
@@ -78,13 +78,15 @@ export const drawPath = (ctx, startNode, endNode) => {
   var currentNode = endNode;
   var nodeList = [];
 
-  while(typeof currentNode != startNode) {
+  while(!currentNode.isEqual(startNode)) {
     nodeList.unshift(currentNode);
     currentNode = currentNode.parent;
+    // debugger;
   }
 
-  nodeList.unshift(startNode);
+  // debugger;
 
+  nodeList.unshift(startNode);
   nodeList.forEach(node => {
     drawTerrain(ctx, {row: node.row, col: node.col}, "yellow");
   });

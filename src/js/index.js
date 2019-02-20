@@ -1,5 +1,7 @@
 import * as DrawUtil from './draw_util';
 import { generateMap, generateRandomMap } from './mapmaker';
+import AStar from './search_util';
+import { setHVals } from './heuristic_util';
 
 export const SIZE = 800;
 
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       solve.disabled = true;
       random.innerHTML = "Creating...";
       map = createRandomMap(ctx, random, create, solve, "Create random map!");
-
+      DrawUtil.fillBlack(ctx2);
       console.log(map);
   };
 
@@ -68,13 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathCount = parseInt(pathOutput.innerHTML);
     const blockRate = parseFloat(blockOutput.innerHTML / 100);
     const minDist = parseInt(distOutput.innerHTML);
-    debugger;
     map = createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
-
+    DrawUtil.fillBlack(ctx2);
     console.log(map);
   }
 
-  solve.onclick = function() { solveMap() };
+  solve.onclick = function() { solveMap(solve, map, output, ctx, ctx2) };
 
   
   
@@ -98,6 +99,60 @@ function createMap(ctx, centerCount, pathCount, blockRate, minDist, btn, btn2, b
   return map;
 }
 
-function solveMap() {
+function solveMap(btn, map, output, ctx, blackctx) {
+  if(typeof map === 'undefined') {
+    btn.innerHTML = "Create map first!"
+  } else {
+    btn.innerHTML = "Solve!";
+    const alg = document.getElementById("algorithms").value;
+    const heu = document.getElementById("heuristics").value;
+    
+  
+    if(alg === "bloop") {
+      btn.innerHTML = "Select an algorithm!";
+    } else {
+      if (heu === "blorp" && alg === "astar") {
+        btn.innerHTML = "Select a heuristic!";
+      } else {
+        btn.innerHTML = "Solving...";
+        
+        var aStar = new AStar(map.startNode, map.endNode, blackctx);
+        if (alg === "astar"){
+          setHVals(map.nodeMap, map.endNode, heu);
+          const weight = parseFloat(output.innerHTML);
+          if (aStar.solve(weight)){
+            debugger;
+            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+          } 
+        } else if (alg === "bfs"){  //who cares about weight here 
+          if (aStar.bfs()){
+            debugger;
+            setTimeElapsed(aStar.time);
+            setCoverage(aStar.size);
+            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+          }
+        } else if (alg === "uniform") { //weight = 0
+          if (aStar.solve(0)){
+            debugger;
+            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+          }
+        }
+      }
+    }
+    console.log(alg);
+    console.log(heu);
+    // console.log(weight);
+
+  }
+  
+}
+
+function setTimeElapsed(time) {
+  document.getElementById("timer").innerHTML = time;
+};
+
+function setCoverage(num) {
+  document.getElementById("size-count").innerHTML = num;
+  document.getElementById("size-percent").innerHTML = (num / 25600 * 100).toFixed(3);
 
 }

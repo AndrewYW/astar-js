@@ -142,8 +142,8 @@ const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
 }
 
 const clearNode = (ctx, {row, col}) => {
-  const x = row * 5;
-  const y = col * 5;
+  const y = row * 5;
+  const x = col * 5;
 
   ctx.clearRect( x, y, 5, 5);
 }
@@ -182,13 +182,15 @@ const drawPath = (ctx, startNode, endNode) => {
   var currentNode = endNode;
   var nodeList = [];
 
-  while(typeof currentNode != startNode) {
+  while(!currentNode.isEqual(startNode)) {
     nodeList.unshift(currentNode);
     currentNode = currentNode.parent;
+    // debugger;
   }
 
-  nodeList.unshift(startNode);
+  // debugger;
 
+  nodeList.unshift(startNode);
   nodeList.forEach(node => {
     drawTerrain(ctx, {row: node.row, col: node.col}, "yellow");
   });
@@ -206,6 +208,68 @@ const drawPoints = (ctx, start, end) => {
 
 /***/ }),
 
+/***/ "./src/js/heuristic_util.js":
+/*!**********************************!*\
+  !*** ./src/js/heuristic_util.js ***!
+  \**********************************/
+/*! exports provided: setHVals */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setHVals", function() { return setHVals; });
+//Euclidean and Euclidean squared distance
+const euclidean = (startNode, endNode, heuristic) => {
+  const a = Math.pow(startNode.row - endNode.row, 2);
+  const b = Math.pow(startNode.col - endNode.col, 2);
+
+  return (heuristic === "euclidean" ? Math.sqrt(a+b) : a + b);
+}
+
+//Manhattan distance
+const manhattan = (startNode, endNode) => {
+  const x = Math.abs(startNode.row - endNode.row);
+  const y = Math.abs(startNode.col - endNode.col);
+
+  return x + y;
+}
+
+// Chebyshev and Octile heuristics
+const diagonal = (startNode, endNode, heuristic) => {
+  const cost = (heuristic === "chebyshev" ? 1 : Math.sqrt(2));
+
+  const x = Math.abs(startNode.row - endNode.row);
+  const y = Math.abs(startNode.col - endNode.col);
+
+  return (x + y) + ((cost-2) * Math.min(x, y));
+}
+
+const setHVals = (nodeMap, endNode, heuristic) => {
+  for (let i = 0; i < nodeMap.length; i++) {
+    for (let j = 0; j < nodeMap.length; j++) {
+      var node = nodeMap[i][j];
+
+      switch (heuristic) {
+        case 'euclidean':
+        case 'euclidean-squared':
+          node.hVal = euclidean(node, endNode, heuristic);
+          break;
+        case 'manhattan':
+          node.hVal = manhattan(node, endNode);
+          break;
+        case 'chebyshev':
+        case 'octile':
+          node.hVal = diagonal(node, endNode, heuristic);
+          break;
+        default:
+          console.log("No heuristic selected");
+      }
+    }
+  }
+}
+
+/***/ }),
+
 /***/ "./src/js/index.js":
 /*!*************************!*\
   !*** ./src/js/index.js ***!
@@ -218,6 +282,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SIZE", function() { return SIZE; });
 /* harmony import */ var _draw_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./draw_util */ "./src/js/draw_util.js");
 /* harmony import */ var _mapmaker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mapmaker */ "./src/js/mapmaker.js");
+/* harmony import */ var _search_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./search_util */ "./src/js/search_util.js");
+/* harmony import */ var _heuristic_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./heuristic_util */ "./src/js/heuristic_util.js");
+
+
 
 
 
@@ -275,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
       solve.disabled = true;
       random.innerHTML = "Creating...";
       map = createRandomMap(ctx, random, create, solve, "Create random map!");
-
+      _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
       console.log(map);
   };
 
@@ -288,13 +356,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathCount = parseInt(pathOutput.innerHTML);
     const blockRate = parseFloat(blockOutput.innerHTML / 100);
     const minDist = parseInt(distOutput.innerHTML);
-    debugger;
     map = createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
-
+    _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
     console.log(map);
   }
 
-  solve.onclick = function() { solveMap() };
+  solve.onclick = function() { solveMap(solve, map, output, ctx, ctx2) };
 
   
   
@@ -318,7 +385,61 @@ function createMap(ctx, centerCount, pathCount, blockRate, minDist, btn, btn2, b
   return map;
 }
 
-function solveMap() {
+function solveMap(btn, map, output, ctx, blackctx) {
+  if(typeof map === 'undefined') {
+    btn.innerHTML = "Create map first!"
+  } else {
+    btn.innerHTML = "Solve!";
+    const alg = document.getElementById("algorithms").value;
+    const heu = document.getElementById("heuristics").value;
+    
+  
+    if(alg === "bloop") {
+      btn.innerHTML = "Select an algorithm!";
+    } else {
+      if (heu === "blorp" && alg === "astar") {
+        btn.innerHTML = "Select a heuristic!";
+      } else {
+        btn.innerHTML = "Solving...";
+        
+        var aStar = new _search_util__WEBPACK_IMPORTED_MODULE_2__["default"](map.startNode, map.endNode, blackctx);
+        if (alg === "astar"){
+          Object(_heuristic_util__WEBPACK_IMPORTED_MODULE_3__["setHVals"])(map.nodeMap, map.endNode, heu);
+          const weight = parseFloat(output.innerHTML);
+          if (aStar.solve(weight)){
+            debugger;
+            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+          } 
+        } else if (alg === "bfs"){  //who cares about weight here 
+          if (aStar.bfs()){
+            debugger;
+            setTimeElapsed(aStar.time);
+            setCoverage(aStar.size);
+            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+          }
+        } else if (alg === "uniform") { //weight = 0
+          if (aStar.solve(0)){
+            debugger;
+            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+          }
+        }
+      }
+    }
+    console.log(alg);
+    console.log(heu);
+    // console.log(weight);
+
+  }
+  
+}
+
+function setTimeElapsed(time) {
+  document.getElementById("timer").innerHTML = time;
+};
+
+function setCoverage(num) {
+  document.getElementById("size-count").innerHTML = num;
+  document.getElementById("size-percent").innerHTML = (num / 25600 * 100).toFixed(3);
 
 }
 
@@ -686,11 +807,12 @@ class Node {
     this.type = type;
     this.row = row;
     this.col = col;
-    this.hVal = 0.0;
-    this.gVal = 0.0;
-    this.fVal = 0.0;
+    this.hVal;
+    this.gVal;
+    this.fVal;
     this.neighbors = [];
-    this.parent = undefined;
+    this.visited = false;
+    this.parent = null;
   }
 
   isEqual(node) {
@@ -700,8 +822,9 @@ class Node {
   }
 
   isMemberOf(array) {
+    var self = this;
     array.forEach(element => {
-      if (this.isEqual) return true;
+      if (self.row === element.row && self.col === element.col) return true;
     });
 
     return false;
@@ -818,6 +941,192 @@ class Node {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Node);
+
+/***/ }),
+
+/***/ "./src/js/queue.js":
+/*!*************************!*\
+  !*** ./src/js/queue.js ***!
+  \*************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+class PriorityQueue {
+  constructor() {
+    this.queue = [];
+  }
+
+  enqueue(node) { //push
+    var contain = false;
+
+    for (let i = 0; i < this.queue.length; i++){
+      if (this.queue[i].fVal > node.fVal) {
+        this.queue.splice(i, 0, node);
+        contain = true;
+        break;
+      }
+    }
+
+    if (!contain) {
+      this.queue.push(node);
+    }
+  }
+
+  //removes first element, returns undefined if empty
+  dequeue() {
+    return this.queue.shift();
+  }
+
+  remove(node) {
+    var i = -1;
+    for(let j = 0; j < this.queue.length; j++){
+      if (this.queue[j].isEqual(node)) i = j;
+    }
+    if (i > -1) this.queue.splice(i, 1);
+  }
+
+  isEmpty() {
+    return (this.queue.length === 0);
+  }
+
+
+  includes(node) {
+    return (this.queue.some(ele => (ele.isEqual(node))))
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (PriorityQueue);
+
+/***/ }),
+
+/***/ "./src/js/search_util.js":
+/*!*******************************!*\
+  !*** ./src/js/search_util.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _queue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./queue */ "./src/js/queue.js");
+/* harmony import */ var _draw_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./draw_util */ "./src/js/draw_util.js");
+
+
+class AStarSearch {
+  constructor(startNode, endNode, blackctx) {
+    this.startNode = startNode;
+    this.endNode = endNode;
+    this.ctx = blackctx;
+    this.size = 0;
+    this.fringe;
+    this.time;
+    this.solve = this.solve.bind(this);
+    this.updateNode = this.updateNode.bind(this);
+  }
+
+  bfs() {
+    var startTime = Date.now();
+    var queue = [];
+    this.startNode.visited = true;
+
+    var currentNode = this.startNode;
+    Object(_draw_util__WEBPACK_IMPORTED_MODULE_1__["clearNode"])(this.ctx, {
+      row: currentNode.row,
+      col: currentNode.col
+    });
+
+    currentNode.neighbors.forEach(node => {
+      node.parent = currentNode;
+      queue.push(node);
+    });
+    while (queue.length != 0) {
+      currentNode = queue.shift();
+      if (!currentNode.visited){
+        currentNode.visited = true;
+        this.size += 1;
+        Object(_draw_util__WEBPACK_IMPORTED_MODULE_1__["clearNode"])(this.ctx, { row: currentNode.row, col: currentNode.col })
+        if (currentNode.isEqual(this.endNode)) {
+          this.time = Date.now() - startTime;
+          return true;
+        } else {
+          currentNode.neighbors.forEach(node => {
+
+              if(node.parent === null) node.parent = currentNode;
+              if(!node.visited) queue.push(node);
+          });
+        }
+      }
+    }
+    debugger;
+    return false;
+  }
+  solve(weight) {
+    // var startTime = Date.now();
+    // var updateTime = setInterval(function(){ 
+    //   document.getElementById("timer").innerHTML = Date.now() - startTime;
+    // }, 1);
+    // this.fringe = new PriorityQueue();
+    // this.closed = [];
+
+    // this.startNode.gVal = 0;
+    // this.startNode.parent = this.startNode;
+
+    // this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * this.weight);
+    // this.fringe.enqueue(this.startNode);
+
+    // while(!this.fringe.isEmpty()) {
+    //   var currentNode = this.fringe.dequeue();
+
+    //   if (currentNode.isEqual(this.endNode)) {
+    //     clearInterval(updateTime);
+    //     return true;
+    //   }
+
+    //   // clearNode(this.ctx, {row: currentNode.row, col: currentNode.col});
+    //   this.closed.push(currentNode);
+    //   this.size = this.closed.length;
+
+    //   currentNode.neighbors.forEach(neighbor => {
+    //     // debugger;
+    //     if (!neighbor.isMemberOf(this.closed)) {
+    //       if (!this.fringe.includes(neighbor)){
+    //         // debugger;
+    //         neighbor.gVal = Number.MAX_SAFE_INTEGER;
+    //         neighbor.parent = null;
+    //       }
+
+    //       this.updateNode(currentNode, neighbor);``
+    //     }
+    //   });
+    // }
+    // clearInterval(updateTime);
+    // return false;
+  }
+
+  updateNode(currentNode, neighbor, weight) {
+    // if (currentNode.gVal + currentNode.travelCost(neighbor) < neighbor.gVal) {
+    //   neighbor.gVal = currentNode.gVal + currentNode.travelCost(neighbor);
+    //   neighbor.parent = currentNode;
+
+    //   if ( this.fringe.includes(neighbor)) this.fringe.remove(neighbor);
+
+    //   neighbor.fVal = neighbor.gVal + (neighbor.hVal * this.weight);
+
+    //   this.fringe.enqueue(neighbor);
+
+
+    // }
+  }
+
+}
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (AStarSearch);
 
 /***/ })
 
