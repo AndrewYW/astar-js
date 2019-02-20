@@ -114,7 +114,7 @@ const clearTerrain = ctx => {
 
 const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   clearTerrain(ctx);
-  var offset = 0;
+  let offset = 0;
 
   map.hardCoordinates.forEach(coord => {
     setTimeout(function(){ drawTerrain(ctx, coord, '#708090')}, offset);
@@ -178,9 +178,11 @@ const drawNode = (ctx, node) => {
   ctx.fillRect(x, y, 5, 5);
 };
 
-const drawPath = (ctx, startNode, endNode) => {
-  var currentNode = endNode;
-  var nodeList = [];
+const drawPath = (ctx, startNode, endNode, count) => {
+  const COLORS = ["red", "yellow", "purple", "white"];
+  let color = count % COLORS.length;
+  let currentNode = endNode;
+  let nodeList = [];
 
   while(!currentNode.isEqual(startNode)) {
     nodeList.unshift(currentNode);
@@ -188,9 +190,9 @@ const drawPath = (ctx, startNode, endNode) => {
   }
 
   nodeList.unshift(startNode);
-  var offset = 0;
+  let offset = 0;
   nodeList.forEach(node => {
-    setTimeout(function() {drawTerrain(ctx, {row: node.row, col: node.col}, "yellow")}, offset);
+    setTimeout(function() {drawTerrain(ctx, {row: node.row, col: node.col}, COLORS[color])}, offset);
     offset += 15;
   });
 
@@ -246,7 +248,7 @@ const diagonal = (startNode, endNode, heuristic) => {
 const setHVals = (nodeMap, endNode, heuristic) => {
   for (let i = 0; i < nodeMap.length; i++) {
     for (let j = 0; j < nodeMap.length; j++) {
-      var node = nodeMap[i][j];
+      let node = nodeMap[i][j];
 
       switch (heuristic) {
         case 'euclidean':
@@ -296,16 +298,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const random = document.getElementById("random-button");
   const create = document.getElementById("create-button");
   const solve = document.getElementById("solve-button");
-  var slider = document.getElementById("slider");
-  var output = document.getElementById("slider-output");
-  var pathSlider = document.getElementById("path-slider");
-  var pathOutput = document.getElementById("path-output");
-  var hardSlider = document.getElementById("hard-slider");
-  var hardOutput = document.getElementById("hard-output");
-  var blockSlider = document.getElementById("block-slider");
-  var blockOutput = document.getElementById("block-output");
-  var distSlider = document.getElementById("dist-slider");
-  var distOutput = document.getElementById("dist-output");
+  let slider = document.getElementById("slider");
+  let output = document.getElementById("slider-output");
+  let pathSlider = document.getElementById("path-slider");
+  let pathOutput = document.getElementById("path-output");
+  let hardSlider = document.getElementById("hard-slider");
+  let hardOutput = document.getElementById("hard-output");
+  let blockSlider = document.getElementById("block-slider");
+  let blockOutput = document.getElementById("block-output");
+  let distSlider = document.getElementById("dist-slider");
+  let distOutput = document.getElementById("dist-output");
   canvas.width = SIZE;
   canvas.height = SIZE;
   const ctx = canvas.getContext("2d");
@@ -335,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"](ctx);
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
 
-  var map;
+  let map;
   random.onclick = function() { 
       random.disabled = true;
       create.disabled = true;
@@ -360,10 +362,13 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(map);
   }
 
+  let count = 0;
   solve.onclick = function() { 
+    
     _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
-    solveMap(solve, map, output, ctx, ctx2);
-   };
+    solveMap(solve, map, output, count, ctx, ctx2);
+    count++;
+  };
 
   
   
@@ -374,20 +379,20 @@ function swapZIndex(canvas, canvas2) {
 }
 
 function createRandomMap(ctx, btn, btn2, btn3, btnText) {
-  var map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateRandomMap"])();
+  let map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateRandomMap"])();
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map, btn, btn2, btn3, btnText);
   
   return map;
 }
 
 function createMap(ctx, centerCount, pathCount, blockRate, minDist, btn, btn2, btn3, btnText) {
-  var map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"])(centerCount, pathCount, blockRate, minDist);
+  let map = Object(_mapmaker__WEBPACK_IMPORTED_MODULE_1__["generateMap"])(centerCount, pathCount, blockRate, minDist);
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawMap"](ctx, map, btn, btn2, btn3, btnText);
 
   return map;
 }
 
-function solveMap(btn, map, output, ctx, blackctx) {
+function solveMap(btn, map, output, count, ctx, blackctx) {
   if(typeof map === 'undefined') {
     btn.innerHTML = "Create map first!"
   } else {
@@ -404,30 +409,29 @@ function solveMap(btn, map, output, ctx, blackctx) {
       } else {
         btn.innerHTML = "Solving...";
         
-        var aStar = new _search_util__WEBPACK_IMPORTED_MODULE_2__["default"](map.startNode, map.endNode, map.nodeMap, blackctx);
+        let aStar = new _search_util__WEBPACK_IMPORTED_MODULE_2__["default"](map.startNode, map.endNode, map.nodeMap, blackctx);
         if (alg === "astar"){
           Object(_heuristic_util__WEBPACK_IMPORTED_MODULE_3__["setHVals"])(map.nodeMap, map.endNode, heu);
           const weight = parseFloat(output.innerHTML);
           if (aStar.solve(weight)){
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
-            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode, count);
             btn.innerHTML = "Solve!";
           } 
         } else if (alg === "bfs"){  //who cares about weight here 
           if (aStar.bfs()){
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
-            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode, count);
             btn.innerHTML = "Solve!";
           }
         } else if (alg === "uniform") { //weight = 0
           if (aStar.solve(0)){
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
-            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+            _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode, count);
             btn.innerHTML = "Solve!";
-
           }
         }
       }
@@ -514,13 +518,13 @@ const inBounds = (row, col, size) => {
 }
 
 const setHards = (map, centerCount = 8) => {
-  var count = 0;
-  var centers = [];
-  var hardCoordinates = [];
+  let count = 0;
+  let centers = [];
+  let hardCoordinates = [];
   while (count < centerCount) {
-    var repeat = false;
-    var row = randomInt(160);
-    var col = randomInt(160);
+    let repeat = false;
+    let row = randomInt(160);
+    let col = randomInt(160);
 
     for (let i = 0; i < count; i++) {
       if (centers.includes([row, col])) repeat = true;
@@ -545,7 +549,7 @@ const setHards = (map, centerCount = 8) => {
 };
 
 const setHighways = (map, pathCount) => {
-  var highways = [];
+  let highways = [];
   let tries = 0;
   let paths = 0;
 
@@ -833,7 +837,7 @@ class Node {
     return false;
 
     //return true would break the forEach iterator but not return true for the function
-    // var self = this;
+    // let self = this;
     // array.forEach(element => {
     //   if (self.row === element.row && self.col === element.col) return true;
     // });
@@ -865,8 +869,8 @@ class Node {
 
 
   travelCost(targetNode) {
-    var straight;
-    var result = 0;
+    let straight;
+    let result = 0;
     straight = (this.row === targetNode.row || this.col === targetNode.col) ? true : false;
 
     if (straight) {
@@ -991,7 +995,7 @@ class PriorityQueue {
   }
 
   enqueue(node) { //push
-    var contain = false;
+    let contain = false;
 
     for (let i = 0; i < this.queue.length; i++){
       if (this.queue[i].fVal > node.fVal) {
@@ -1012,7 +1016,7 @@ class PriorityQueue {
   }
 
   remove(node) {
-    var i = -1;
+    let i = -1;
     for(let j = 0; j < this.queue.length; j++){
       if (this.queue[j].isEqual(node)) i = j;
     }
@@ -1063,11 +1067,11 @@ class AStarSearch {
   bfs() {
     if (this.startNode.visited) this.resetVisited();
     
-    var startTime = Date.now();
-    var queue = [];
+    let startTime = Date.now();
+    let queue = [];
     this.startNode.visited = true;
 
-    var currentNode = this.startNode;
+    let currentNode = this.startNode;
     Object(_draw_util__WEBPACK_IMPORTED_MODULE_1__["clearNode"])(this.ctx, {
       row: currentNode.row,
       col: currentNode.col
@@ -1100,16 +1104,16 @@ class AStarSearch {
   }
   solve(weight) {
     
-    var startTime = Date.now()
+    let startTime = Date.now();
     this.fringe = new _queue__WEBPACK_IMPORTED_MODULE_0__["default"]();
-    var closed = [];
+    let closed = [];
 
     this.startNode.gVal = 0;
     this.startNode.parent = this.startNode;
     this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * weight);
     this.fringe.enqueue(this.startNode);
     while (!this.fringe.isEmpty()) {
-      var currentNode = this.fringe.dequeue();
+      let currentNode = this.fringe.dequeue();
       Object(_draw_util__WEBPACK_IMPORTED_MODULE_1__["clearNode"])(this.ctx, { row: currentNode.row, col: currentNode.col });
       if (currentNode.isEqual(this.endNode)) {
         console.log("found target");

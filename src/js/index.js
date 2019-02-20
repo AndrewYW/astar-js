@@ -11,16 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const random = document.getElementById("random-button");
   const create = document.getElementById("create-button");
   const solve = document.getElementById("solve-button");
-  var slider = document.getElementById("slider");
-  var output = document.getElementById("slider-output");
-  var pathSlider = document.getElementById("path-slider");
-  var pathOutput = document.getElementById("path-output");
-  var hardSlider = document.getElementById("hard-slider");
-  var hardOutput = document.getElementById("hard-output");
-  var blockSlider = document.getElementById("block-slider");
-  var blockOutput = document.getElementById("block-output");
-  var distSlider = document.getElementById("dist-slider");
-  var distOutput = document.getElementById("dist-output");
+  let slider = document.getElementById("slider");
+  let output = document.getElementById("slider-output");
+  let pathSlider = document.getElementById("path-slider");
+  let pathOutput = document.getElementById("path-output");
+  let hardSlider = document.getElementById("hard-slider");
+  let hardOutput = document.getElementById("hard-output");
+  let blockSlider = document.getElementById("block-slider");
+  let blockOutput = document.getElementById("block-output");
+  let distSlider = document.getElementById("dist-slider");
+  let distOutput = document.getElementById("dist-output");
   canvas.width = SIZE;
   canvas.height = SIZE;
   const ctx = canvas.getContext("2d");
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   DrawUtil.clearTerrain(ctx);
   DrawUtil.fillBlack(ctx2);
 
-  var map;
+  let map;
   random.onclick = function() { 
       random.disabled = true;
       create.disabled = true;
@@ -75,10 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(map);
   }
 
+  let count = 0;
   solve.onclick = function() { 
+    
     DrawUtil.fillBlack(ctx2);
-    solveMap(solve, map, output, ctx, ctx2);
-   };
+    solveMap(solve, map, output, count, ctx, ctx2);
+    count++;
+  };
 
   
   
@@ -89,20 +92,20 @@ function swapZIndex(canvas, canvas2) {
 }
 
 function createRandomMap(ctx, btn, btn2, btn3, btnText) {
-  var map = generateRandomMap();
+  let map = generateRandomMap();
   DrawUtil.drawMap(ctx, map, btn, btn2, btn3, btnText);
   
   return map;
 }
 
 function createMap(ctx, centerCount, pathCount, blockRate, minDist, btn, btn2, btn3, btnText) {
-  var map = generateMap(centerCount, pathCount, blockRate, minDist);
+  let map = generateMap(centerCount, pathCount, blockRate, minDist);
   DrawUtil.drawMap(ctx, map, btn, btn2, btn3, btnText);
 
   return map;
 }
 
-function solveMap(btn, map, output, ctx, blackctx) {
+function solveMap(btn, map, output, count, ctx, blackctx) {
   if(typeof map === 'undefined') {
     btn.innerHTML = "Create map first!"
   } else {
@@ -119,30 +122,29 @@ function solveMap(btn, map, output, ctx, blackctx) {
       } else {
         btn.innerHTML = "Solving...";
         
-        var aStar = new AStar(map.startNode, map.endNode, map.nodeMap, blackctx);
+        let aStar = new AStar(map.startNode, map.endNode, map.nodeMap, blackctx);
         if (alg === "astar"){
           setHVals(map.nodeMap, map.endNode, heu);
           const weight = parseFloat(output.innerHTML);
           if (aStar.solve(weight)){
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
-            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode, count);
             btn.innerHTML = "Solve!";
           } 
         } else if (alg === "bfs"){  //who cares about weight here 
           if (aStar.bfs()){
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
-            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode, count);
             btn.innerHTML = "Solve!";
           }
         } else if (alg === "uniform") { //weight = 0
           if (aStar.solve(0)){
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
-            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+            DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode, count);
             btn.innerHTML = "Solve!";
-
           }
         }
       }

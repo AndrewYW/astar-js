@@ -5,7 +5,7 @@ class PriorityQueue {
   }
 
   enqueue(node) { //push
-    var contain = false;
+    let contain = false;
 
     for (let i = 0; i < this.queue.length; i++){
       if (this.queue[i].fVal > node.fVal) {
@@ -26,7 +26,7 @@ class PriorityQueue {
   }
 
   remove(node) {
-    var i = -1;
+    let i = -1;
     for(let j = 0; j < this.queue.length; j++){
       if (this.queue[j].isEqual(node)) i = j;
     }

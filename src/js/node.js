@@ -24,7 +24,7 @@ class Node {
     return false;
 
     //return true would break the forEach iterator but not return true for the function
-    // var self = this;
+    // let self = this;
     // array.forEach(element => {
     //   if (self.row === element.row && self.col === element.col) return true;
     // });
@@ -56,8 +56,8 @@ class Node {
 
 
   travelCost(targetNode) {
-    var straight;
-    var result = 0;
+    let straight;
+    let result = 0;
     straight = (this.row === targetNode.row || this.col === targetNode.col) ? true : false;
 
     if (straight) {

@@ -50,13 +50,13 @@ const inBounds = (row, col, size) => {
 }
 
 const setHards = (map, centerCount = 8) => {
-  var count = 0;
-  var centers = [];
-  var hardCoordinates = [];
+  let count = 0;
+  let centers = [];
+  let hardCoordinates = [];
   while (count < centerCount) {
-    var repeat = false;
-    var row = randomInt(160);
-    var col = randomInt(160);
+    let repeat = false;
+    let row = randomInt(160);
+    let col = randomInt(160);
 
     for (let i = 0; i < count; i++) {
       if (centers.includes([row, col])) repeat = true;
@@ -81,7 +81,7 @@ const setHards = (map, centerCount = 8) => {
 };
 
 const setHighways = (map, pathCount) => {
-  var highways = [];
+  let highways = [];
   let tries = 0;
   let paths = 0;
 

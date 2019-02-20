@@ -16,11 +16,11 @@ class AStarSearch {
   bfs() {
     if (this.startNode.visited) this.resetVisited();
     
-    var startTime = Date.now();
-    var queue = [];
+    let startTime = Date.now();
+    let queue = [];
     this.startNode.visited = true;
 
-    var currentNode = this.startNode;
+    let currentNode = this.startNode;
     clearNode(this.ctx, {
       row: currentNode.row,
       col: currentNode.col
@@ -53,16 +53,16 @@ class AStarSearch {
   }
   solve(weight) {
     
-    var startTime = Date.now()
+    let startTime = Date.now();
     this.fringe = new PriorityQueue();
-    var closed = [];
+    let closed = [];
 
     this.startNode.gVal = 0;
     this.startNode.parent = this.startNode;
     this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * weight);
     this.fringe.enqueue(this.startNode);
     while (!this.fringe.isEmpty()) {
-      var currentNode = this.fringe.dequeue();
+      let currentNode = this.fringe.dequeue();
       clearNode(this.ctx, { row: currentNode.row, col: currentNode.col });
       if (currentNode.isEqual(this.endNode)) {
         console.log("found target");

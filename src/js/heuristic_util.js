@@ -27,7 +27,7 @@ const diagonal = (startNode, endNode, heuristic) => {
 export const setHVals = (nodeMap, endNode, heuristic) => {
   for (let i = 0; i < nodeMap.length; i++) {
     for (let j = 0; j < nodeMap.length; j++) {
-      var node = nodeMap[i][j];
+      let node = nodeMap[i][j];
 
       switch (heuristic) {
         case 'euclidean':

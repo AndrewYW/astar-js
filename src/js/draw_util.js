@@ -10,7 +10,7 @@ export const clearTerrain = ctx => {
 
 export const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   clearTerrain(ctx);
-  var offset = 0;
+  let offset = 0;
 
   map.hardCoordinates.forEach(coord => {
     setTimeout(function(){ drawTerrain(ctx, coord, '#708090')}, offset);
@@ -74,9 +74,11 @@ export const drawNode = (ctx, node) => {
   ctx.fillRect(x, y, 5, 5);
 };
 
-export const drawPath = (ctx, startNode, endNode) => {
-  var currentNode = endNode;
-  var nodeList = [];
+export const drawPath = (ctx, startNode, endNode, count) => {
+  const COLORS = ["red", "yellow", "purple", "white"];
+  let color = count % COLORS.length;
+  let currentNode = endNode;
+  let nodeList = [];
 
   while(!currentNode.isEqual(startNode)) {
     nodeList.unshift(currentNode);
@@ -84,9 +86,9 @@ export const drawPath = (ctx, startNode, endNode) => {
   }
 
   nodeList.unshift(startNode);
-  var offset = 0;
+  let offset = 0;
   nodeList.forEach(node => {
-    setTimeout(function() {drawTerrain(ctx, {row: node.row, col: node.col}, "yellow")}, offset);
+    setTimeout(function() {drawTerrain(ctx, {row: node.row, col: node.col}, COLORS[color])}, offset);
     offset += 15;
   });
 
