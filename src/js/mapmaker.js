@@ -87,7 +87,6 @@ const setHighways = (map, pathCount) => {
 
   while(paths < pathCount) {
     if (tries === 100000) {
-      console.log(`try count: ${tries}`)
       highways = [];
       tries = 0;
     } else {

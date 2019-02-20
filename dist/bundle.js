@@ -90,13 +90,14 @@
 /*!*****************************!*\
   !*** ./src/js/draw_util.js ***!
   \*****************************/
-/*! exports provided: fillBlack, clearTerrain, drawMap, clearNode, drawTerrain, drawNode, drawPath */
+/*! exports provided: fillBlack, clearTerrain, clearMap, drawMap, clearNode, drawTerrain, drawNode, drawPath */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fillBlack", function() { return fillBlack; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearTerrain", function() { return clearTerrain; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearMap", function() { return clearMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawMap", function() { return drawMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearNode", function() { return clearNode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawTerrain", function() { return drawTerrain; });
@@ -111,6 +112,10 @@ const clearTerrain = ctx => {
   ctx.fillStyle = "#66CD00";
   ctx.fillRect(0, 0, 800, 800);
 };
+
+const clearMap = ctx => {
+  ctx.clearRect(0, 0, 800, 800);
+}
 
 const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   clearTerrain(ctx);
@@ -335,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearTerrain"](ctx);
-  _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
+  _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearMap"](ctx2);
 
   let map;
   random.onclick = function() { 
@@ -343,9 +348,8 @@ document.addEventListener("DOMContentLoaded", () => {
       create.disabled = true;
       solve.disabled = true;
       random.innerHTML = "Creating...";
+      _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearMap"](ctx2);
       map = createRandomMap(ctx, random, create, solve, "Create random map!");
-      _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
-      console.log(map);
   };
 
   create.onclick = function() {
@@ -357,9 +361,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathCount = parseInt(pathOutput.innerHTML);
     const blockRate = parseFloat(blockOutput.innerHTML / 100);
     const minDist = parseInt(distOutput.innerHTML);
+    _draw_util__WEBPACK_IMPORTED_MODULE_0__["clearMap"](ctx2);
     map = createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
-    _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
-    console.log(map);
   }
 
   let count = 0;
@@ -436,8 +439,6 @@ function solveMap(btn, map, output, count, ctx, blackctx) {
         }
       }
     }
-    console.log(alg);
-    console.log(heu);
   }
   
 }
@@ -555,7 +556,6 @@ const setHighways = (map, pathCount) => {
 
   while(paths < pathCount) {
     if (tries === 100000) {
-      console.log(`try count: ${tries}`)
       highways = [];
       tries = 0;
     } else {
@@ -1099,7 +1099,6 @@ class AStarSearch {
         }
       }
     }
-    debugger;
     return false;
   }
   solve(weight) {
@@ -1116,7 +1115,6 @@ class AStarSearch {
       let currentNode = this.fringe.dequeue();
       Object(_draw_util__WEBPACK_IMPORTED_MODULE_1__["clearNode"])(this.ctx, { row: currentNode.row, col: currentNode.col });
       if (currentNode.isEqual(this.endNode)) {
-        console.log("found target");
         this.time = Date.now() - startTime;
         this.size = closed.length;
         return true;
@@ -1133,8 +1131,6 @@ class AStarSearch {
         }
       });
     }
-
-    console.log("target not found");
     return false;
   }
 

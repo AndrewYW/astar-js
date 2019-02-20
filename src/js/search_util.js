@@ -48,7 +48,6 @@ class AStarSearch {
         }
       }
     }
-    debugger;
     return false;
   }
   solve(weight) {
@@ -65,7 +64,6 @@ class AStarSearch {
       let currentNode = this.fringe.dequeue();
       clearNode(this.ctx, { row: currentNode.row, col: currentNode.col });
       if (currentNode.isEqual(this.endNode)) {
-        console.log("found target");
         this.time = Date.now() - startTime;
         this.size = closed.length;
         return true;
@@ -82,8 +80,6 @@ class AStarSearch {
         }
       });
     }
-
-    console.log("target not found");
     return false;
   }
 

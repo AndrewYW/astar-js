@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   DrawUtil.clearTerrain(ctx);
-  DrawUtil.fillBlack(ctx2);
+  DrawUtil.clearMap(ctx2);
 
   let map;
   random.onclick = function() { 
@@ -56,9 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
       create.disabled = true;
       solve.disabled = true;
       random.innerHTML = "Creating...";
+      DrawUtil.clearMap(ctx2);
       map = createRandomMap(ctx, random, create, solve, "Create random map!");
-      DrawUtil.fillBlack(ctx2);
-      console.log(map);
   };
 
   create.onclick = function() {
@@ -70,9 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathCount = parseInt(pathOutput.innerHTML);
     const blockRate = parseFloat(blockOutput.innerHTML / 100);
     const minDist = parseInt(distOutput.innerHTML);
+    DrawUtil.clearMap(ctx2);
     map = createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
-    DrawUtil.fillBlack(ctx2);
-    console.log(map);
   }
 
   let count = 0;
@@ -149,8 +147,6 @@ function solveMap(btn, map, output, count, ctx, blackctx) {
         }
       }
     }
-    console.log(alg);
-    console.log(heu);
   }
   
 }

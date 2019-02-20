@@ -8,6 +8,10 @@ export const clearTerrain = ctx => {
   ctx.fillRect(0, 0, 800, 800);
 };
 
+export const clearMap = ctx => {
+  ctx.clearRect(0, 0, 800, 800);
+}
+
 export const drawMap = (ctx, map, btn, btn2, btn3, btnText) => {
   clearTerrain(ctx);
   let offset = 0;
