@@ -42,7 +42,7 @@ export const setHVals = (nodeMap, endNode, heuristic) => {
           node.hVal = diagonal(node, endNode, heuristic);
           break;
         default:
-          console.log("No heuristic selected");
+          node.hVal = 0;
       }
     }
   }

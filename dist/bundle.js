@@ -185,7 +185,7 @@ const drawPath = (ctx, startNode, endNode) => {
   while(!currentNode.isEqual(startNode)) {
     nodeList.unshift(currentNode);
     currentNode = currentNode.parent;
-    // debugger;
+    if (nodeList.length > 6) debugger;
   }
 
   // debugger;
@@ -264,7 +264,7 @@ const setHVals = (nodeMap, endNode, heuristic) => {
           node.hVal = diagonal(node, endNode, heuristic);
           break;
         default:
-          console.log("No heuristic selected");
+          node.hVal = 0;
       }
     }
   }
@@ -824,12 +824,16 @@ class Node {
   }
 
   isMemberOf(array) {
-    var self = this;
-    array.forEach(element => {
-      if (self.row === element.row && self.col === element.col) return true;
-    });
-
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].row === this.row && array[i].col === this.col) return true;
+    }
     return false;
+    // var self = this;
+    // array.forEach(element => {
+    //   if (self.row === element.row && self.col === element.col) return true;
+    // });
+
+    // return false;
   }
 
   inBounds(row, col, map) {
@@ -857,7 +861,7 @@ class Node {
 
   travelCost(targetNode) {
     var straight;
-
+    var result = 0;
     straight = (this.row === targetNode.row || this.col === targetNode.col) ? true : false;
 
     if (straight) {
@@ -865,49 +869,65 @@ class Node {
         case '1':
           switch (targetNode.type) {
             case '1':
-              return 1.0;
+              result = 1.0;
+              break;
             case '2':
-              return 1.5;
+              result = 1.5;
+              break;
             case 'a':
-              return 1.0;
+              result = 1.0;
+              break;
             case 'b':
-              return 1.5;
+              result = 1.5;
+              break;
           }
           break;
         case '2':
           switch (targetNode.type) {
             case '1':
-              return 1.5;
+              result = 1.5;
+              break;
             case '2':
-              return 2.0;
+              result = 2.0;
+              break;
             case 'a':
-              return 1.5;
+              result = 1.5;
+              break;
             case 'b':
-              return 2.0;
+              result = 2.0;
+              break;
           }
           break;
         case 'a':
           switch (targetNode.type) {
             case '1':
-              return 1.0;
+              result = 1.0;
+              break;
             case '2':
-              return 1.5;
+              result = 1.5;
+              break;
             case 'a':
-              return .25;
+              result = .25;
+              break;
             case 'b':
-              return .375;
+              result = .375;
+              break;
           }
           break;
         case 'b':
           switch (targetNode.type) {
             case '1':
-              return 1.5;
+              result = 1.5;
+              break;
             case '2':
-              return 2.0;
+              result = 2.0;
+              break;
             case 'a':
-              return .375;
+              result = .375;
+              break;
             case 'b':
-              return .25;
+              result = .25;
+              break;
           }
           break;
       }
@@ -918,10 +938,12 @@ class Node {
           switch (targetNode.type) {
             case '1':
             case 'a':
-              return Math.sqrt(2);
+              result = Math.sqrt(2);
+              break;
             case '2':
             case 'b':
-              return (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              result = (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              break;
           }
           break;
         case '2':
@@ -929,16 +951,18 @@ class Node {
           switch (targetNode.type) {
             case '1':
             case 'a':
-              return (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              result = (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              break;
             case '2':
             case 'b':
-              return Math.sqrt(8);
+              result = Math.sqrt(8);
+              break;
           }
           break;
       }
     }
 
-    return 0;
+    return result;
   }
 }
 
@@ -1068,60 +1092,108 @@ class AStarSearch {
   }
   solve(weight) {
     // var startTime = Date.now();
-    // var updateTime = setInterval(function(){ 
-    //   document.getElementById("timer").innerHTML = Date.now() - startTime;
-    // }, 1);
+    // // var updateTime = setInterval(function(){ 
+    // //   document.getElementById("timer").innerHTML = Date.now() - startTime;
+    // // }, 1);
     // this.fringe = new PriorityQueue();
-    // this.closed = [];
+    // var closed = [];
 
     // this.startNode.gVal = 0;
     // this.startNode.parent = this.startNode;
 
-    // this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * this.weight);
+    // // debugger;
+    // this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * weight);
     // this.fringe.enqueue(this.startNode);
 
     // while(!this.fringe.isEmpty()) {
     //   var currentNode = this.fringe.dequeue();
 
     //   if (currentNode.isEqual(this.endNode)) {
-    //     clearInterval(updateTime);
+    //     debugger;
+    //     this.time = Date.now() - startTime;
+    // //     clearInterval(updateTime);
     //     return true;
     //   }
-
-    //   // clearNode(this.ctx, {row: currentNode.row, col: currentNode.col});
-    //   this.closed.push(currentNode);
-    //   this.size = this.closed.length;
-
+    //   clearNode(this.ctx, {row: currentNode.row, col: currentNode.col});
+    //   if (!currentNode.isMemberOf(closed)) {
+    //     closed.push(currentNode);
+    //     this.size = closed.length;
+    //     console.log(this.size);
+    //   }
+      
     //   currentNode.neighbors.forEach(neighbor => {
     //     // debugger;
-    //     if (!neighbor.isMemberOf(this.closed)) {
+    //     if (!neighbor.isMemberOf(closed)) {
     //       if (!this.fringe.includes(neighbor)){
     //         // debugger;
     //         neighbor.gVal = Number.MAX_SAFE_INTEGER;
     //         neighbor.parent = null;
     //       }
-
-    //       this.updateNode(currentNode, neighbor);``
+    //       this.updateNode(currentNode, neighbor, weight);
     //     }
     //   });
     // }
-    // clearInterval(updateTime);
+    // // clearInterval(updateTime);
+    // debugger
     // return false;
+
+    this.fringe = new _queue__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    var closed = [];
+
+    this.startNode.gVal = 0;
+    this.startNode.parent = this.startNode;
+    this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * weight);
+    this.fringe.enqueue(this.startNode);
+    while (!this.fringe.isEmpty()) {
+      var currentNode = this.fringe.dequeue();
+      if (currentNode.isEqual(this.endNode)) {
+        console.log("found target");
+        return true;
+      }
+
+      closed.push(currentNode);
+      // debugger;
+      currentNode.neighbors.forEach(node => {
+        if (!node.isMemberOf(closed)) {
+          if (!this.fringe.includes(node)) {
+            // debugger;
+            node.gVal = Infinity;
+            node.parent = null;
+          }
+          // debugger;
+          this.updateNode(currentNode, node, weight);
+        }
+      });
+    }
+
+    console.log("target not found");
+    return false;
   }
 
   updateNode(currentNode, neighbor, weight) {
     // if (currentNode.gVal + currentNode.travelCost(neighbor) < neighbor.gVal) {
     //   neighbor.gVal = currentNode.gVal + currentNode.travelCost(neighbor);
-    //   neighbor.parent = currentNode;
+    //   if (neighbor.parent === null) neighbor.parent = currentNode;
 
     //   if ( this.fringe.includes(neighbor)) this.fringe.remove(neighbor);
 
-    //   neighbor.fVal = neighbor.gVal + (neighbor.hVal * this.weight);
-
+    //   neighbor.fVal = neighbor.gVal + (neighbor.hVal * weight);
+    //   // debugger
     //   this.fringe.enqueue(neighbor);
 
 
     // }
+
+    if (currentNode.gVal + currentNode.travelCost(neighbor) < neighbor.gVal) {
+      neighbor.gVal = currentNode.gVal + currentNode.travelCost(neighbor);
+      neighbor.parent = currentNode;
+
+      if(this.fringe.includes(neighbor)) this.fringe.remove(neighbor);
+
+      neighbor.fVal = neighbor.gVal + (neighbor.hVal * weight);
+
+      this.fringe.enqueue(neighbor);
+    }
   }
 
 }

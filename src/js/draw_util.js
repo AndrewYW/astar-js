@@ -81,7 +81,7 @@ export const drawPath = (ctx, startNode, endNode) => {
   while(!currentNode.isEqual(startNode)) {
     nodeList.unshift(currentNode);
     currentNode = currentNode.parent;
-    // debugger;
+    if (nodeList.length > 6) debugger;
   }
 
   // debugger;

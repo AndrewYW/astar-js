@@ -18,12 +18,16 @@ class Node {
   }
 
   isMemberOf(array) {
-    var self = this;
-    array.forEach(element => {
-      if (self.row === element.row && self.col === element.col) return true;
-    });
-
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].row === this.row && array[i].col === this.col) return true;
+    }
     return false;
+    // var self = this;
+    // array.forEach(element => {
+    //   if (self.row === element.row && self.col === element.col) return true;
+    // });
+
+    // return false;
   }
 
   inBounds(row, col, map) {
@@ -51,7 +55,7 @@ class Node {
 
   travelCost(targetNode) {
     var straight;
-
+    var result = 0;
     straight = (this.row === targetNode.row || this.col === targetNode.col) ? true : false;
 
     if (straight) {
@@ -59,49 +63,65 @@ class Node {
         case '1':
           switch (targetNode.type) {
             case '1':
-              return 1.0;
+              result = 1.0;
+              break;
             case '2':
-              return 1.5;
+              result = 1.5;
+              break;
             case 'a':
-              return 1.0;
+              result = 1.0;
+              break;
             case 'b':
-              return 1.5;
+              result = 1.5;
+              break;
           }
           break;
         case '2':
           switch (targetNode.type) {
             case '1':
-              return 1.5;
+              result = 1.5;
+              break;
             case '2':
-              return 2.0;
+              result = 2.0;
+              break;
             case 'a':
-              return 1.5;
+              result = 1.5;
+              break;
             case 'b':
-              return 2.0;
+              result = 2.0;
+              break;
           }
           break;
         case 'a':
           switch (targetNode.type) {
             case '1':
-              return 1.0;
+              result = 1.0;
+              break;
             case '2':
-              return 1.5;
+              result = 1.5;
+              break;
             case 'a':
-              return .25;
+              result = .25;
+              break;
             case 'b':
-              return .375;
+              result = .375;
+              break;
           }
           break;
         case 'b':
           switch (targetNode.type) {
             case '1':
-              return 1.5;
+              result = 1.5;
+              break;
             case '2':
-              return 2.0;
+              result = 2.0;
+              break;
             case 'a':
-              return .375;
+              result = .375;
+              break;
             case 'b':
-              return .25;
+              result = .25;
+              break;
           }
           break;
       }
@@ -112,10 +132,12 @@ class Node {
           switch (targetNode.type) {
             case '1':
             case 'a':
-              return Math.sqrt(2);
+              result = Math.sqrt(2);
+              break;
             case '2':
             case 'b':
-              return (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              result = (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              break;
           }
           break;
         case '2':
@@ -123,16 +145,18 @@ class Node {
           switch (targetNode.type) {
             case '1':
             case 'a':
-              return (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              result = (Math.sqrt(2) + Math.sqrt(8)) / 2;
+              break;
             case '2':
             case 'b':
-              return Math.sqrt(8);
+              result = Math.sqrt(8);
+              break;
           }
           break;
       }
     }
 
-    return 0;
+    return result;
   }
 }
 
