@@ -22,6 +22,8 @@ class Node {
       if (array[i].row === this.row && array[i].col === this.col) return true;
     }
     return false;
+
+    //return true would break the forEach iterator but not return true for the function
     // var self = this;
     // array.forEach(element => {
     //   if (self.row === element.row && self.col === element.col) return true;

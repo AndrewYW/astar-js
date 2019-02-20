@@ -185,10 +185,7 @@ const drawPath = (ctx, startNode, endNode) => {
   while(!currentNode.isEqual(startNode)) {
     nodeList.unshift(currentNode);
     currentNode = currentNode.parent;
-    if (nodeList.length > 6) debugger;
   }
-
-  // debugger;
 
   nodeList.unshift(startNode);
   var offset = 0;
@@ -363,7 +360,10 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(map);
   }
 
-  solve.onclick = function() { solveMap(solve, map, output, ctx, ctx2) };
+  solve.onclick = function() { 
+    _draw_util__WEBPACK_IMPORTED_MODULE_0__["fillBlack"](ctx2);
+    solveMap(solve, map, output, ctx, ctx2);
+   };
 
   
   
@@ -404,13 +404,15 @@ function solveMap(btn, map, output, ctx, blackctx) {
       } else {
         btn.innerHTML = "Solving...";
         
-        var aStar = new _search_util__WEBPACK_IMPORTED_MODULE_2__["default"](map.startNode, map.endNode, blackctx);
+        var aStar = new _search_util__WEBPACK_IMPORTED_MODULE_2__["default"](map.startNode, map.endNode, map.nodeMap, blackctx);
         if (alg === "astar"){
           Object(_heuristic_util__WEBPACK_IMPORTED_MODULE_3__["setHVals"])(map.nodeMap, map.endNode, heu);
           const weight = parseFloat(output.innerHTML);
           if (aStar.solve(weight)){
-            debugger;
+            setTimeElapsed(aStar.time);
+            setCoverage(aStar.size);
             _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+            btn.innerHTML = "Solve!";
           } 
         } else if (alg === "bfs"){  //who cares about weight here 
           if (aStar.bfs()){
@@ -421,16 +423,17 @@ function solveMap(btn, map, output, ctx, blackctx) {
           }
         } else if (alg === "uniform") { //weight = 0
           if (aStar.solve(0)){
-            debugger;
+            setTimeElapsed(aStar.time);
+            setCoverage(aStar.size);
             _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+            btn.innerHTML = "Solve!";
+
           }
         }
       }
     }
     console.log(alg);
     console.log(heu);
-    // console.log(weight);
-
   }
   
 }
@@ -828,6 +831,8 @@ class Node {
       if (array[i].row === this.row && array[i].col === this.col) return true;
     }
     return false;
+
+    //return true would break the forEach iterator but not return true for the function
     // var self = this;
     // array.forEach(element => {
     //   if (self.row === element.row && self.col === element.col) return true;
@@ -1043,7 +1048,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class AStarSearch {
-  constructor(startNode, endNode, blackctx) {
+  constructor(startNode, endNode, nodeMap, blackctx) {
+    this.nodeMap = nodeMap;
     this.startNode = startNode;
     this.endNode = endNode;
     this.ctx = blackctx;
@@ -1055,6 +1061,8 @@ class AStarSearch {
   }
 
   bfs() {
+    if (this.startNode.visited) this.resetVisited();
+    
     var startTime = Date.now();
     var queue = [];
     this.startNode.visited = true;
@@ -1091,52 +1099,8 @@ class AStarSearch {
     return false;
   }
   solve(weight) {
-    // var startTime = Date.now();
-    // // var updateTime = setInterval(function(){ 
-    // //   document.getElementById("timer").innerHTML = Date.now() - startTime;
-    // // }, 1);
-    // this.fringe = new PriorityQueue();
-    // var closed = [];
-
-    // this.startNode.gVal = 0;
-    // this.startNode.parent = this.startNode;
-
-    // // debugger;
-    // this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * weight);
-    // this.fringe.enqueue(this.startNode);
-
-    // while(!this.fringe.isEmpty()) {
-    //   var currentNode = this.fringe.dequeue();
-
-    //   if (currentNode.isEqual(this.endNode)) {
-    //     debugger;
-    //     this.time = Date.now() - startTime;
-    // //     clearInterval(updateTime);
-    //     return true;
-    //   }
-    //   clearNode(this.ctx, {row: currentNode.row, col: currentNode.col});
-    //   if (!currentNode.isMemberOf(closed)) {
-    //     closed.push(currentNode);
-    //     this.size = closed.length;
-    //     console.log(this.size);
-    //   }
-      
-    //   currentNode.neighbors.forEach(neighbor => {
-    //     // debugger;
-    //     if (!neighbor.isMemberOf(closed)) {
-    //       if (!this.fringe.includes(neighbor)){
-    //         // debugger;
-    //         neighbor.gVal = Number.MAX_SAFE_INTEGER;
-    //         neighbor.parent = null;
-    //       }
-    //       this.updateNode(currentNode, neighbor, weight);
-    //     }
-    //   });
-    // }
-    // // clearInterval(updateTime);
-    // debugger
-    // return false;
-
+    
+    var startTime = Date.now()
     this.fringe = new _queue__WEBPACK_IMPORTED_MODULE_0__["default"]();
     var closed = [];
 
@@ -1146,21 +1110,21 @@ class AStarSearch {
     this.fringe.enqueue(this.startNode);
     while (!this.fringe.isEmpty()) {
       var currentNode = this.fringe.dequeue();
+      Object(_draw_util__WEBPACK_IMPORTED_MODULE_1__["clearNode"])(this.ctx, { row: currentNode.row, col: currentNode.col });
       if (currentNode.isEqual(this.endNode)) {
         console.log("found target");
+        this.time = Date.now() - startTime;
+        this.size = closed.length;
         return true;
       }
 
       closed.push(currentNode);
-      // debugger;
       currentNode.neighbors.forEach(node => {
         if (!node.isMemberOf(closed)) {
           if (!this.fringe.includes(node)) {
-            // debugger;
             node.gVal = Infinity;
             node.parent = null;
           }
-          // debugger;
           this.updateNode(currentNode, node, weight);
         }
       });
@@ -1171,18 +1135,6 @@ class AStarSearch {
   }
 
   updateNode(currentNode, neighbor, weight) {
-    // if (currentNode.gVal + currentNode.travelCost(neighbor) < neighbor.gVal) {
-    //   neighbor.gVal = currentNode.gVal + currentNode.travelCost(neighbor);
-    //   if (neighbor.parent === null) neighbor.parent = currentNode;
-
-    //   if ( this.fringe.includes(neighbor)) this.fringe.remove(neighbor);
-
-    //   neighbor.fVal = neighbor.gVal + (neighbor.hVal * weight);
-    //   // debugger
-    //   this.fringe.enqueue(neighbor);
-
-
-    // }
 
     if (currentNode.gVal + currentNode.travelCost(neighbor) < neighbor.gVal) {
       neighbor.gVal = currentNode.gVal + currentNode.travelCost(neighbor);
@@ -1196,6 +1148,16 @@ class AStarSearch {
     }
   }
 
+  resetVisited() {
+    this.startNode.visited = false;
+    this.endNode.visited = false;
+    
+    for (let i = 0; i < this.nodeMap.length; i++) {
+      for (let j = 0; j < this.nodeMap.length; j++) {
+        this.nodeMap[i][j].visited = false;
+      }
+    }
+  }
 }
 
 

@@ -75,7 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(map);
   }
 
-  solve.onclick = function() { solveMap(solve, map, output, ctx, ctx2) };
+  solve.onclick = function() { 
+    DrawUtil.fillBlack(ctx2);
+    solveMap(solve, map, output, ctx, ctx2);
+   };
 
   
   
@@ -116,13 +119,15 @@ function solveMap(btn, map, output, ctx, blackctx) {
       } else {
         btn.innerHTML = "Solving...";
         
-        var aStar = new AStar(map.startNode, map.endNode, blackctx);
+        var aStar = new AStar(map.startNode, map.endNode, map.nodeMap, blackctx);
         if (alg === "astar"){
           setHVals(map.nodeMap, map.endNode, heu);
           const weight = parseFloat(output.innerHTML);
           if (aStar.solve(weight)){
-            debugger;
+            setTimeElapsed(aStar.time);
+            setCoverage(aStar.size);
             DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+            btn.innerHTML = "Solve!";
           } 
         } else if (alg === "bfs"){  //who cares about weight here 
           if (aStar.bfs()){
@@ -133,16 +138,17 @@ function solveMap(btn, map, output, ctx, blackctx) {
           }
         } else if (alg === "uniform") { //weight = 0
           if (aStar.solve(0)){
-            debugger;
+            setTimeElapsed(aStar.time);
+            setCoverage(aStar.size);
             DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+            btn.innerHTML = "Solve!";
+
           }
         }
       }
     }
     console.log(alg);
     console.log(heu);
-    // console.log(weight);
-
   }
   
 }

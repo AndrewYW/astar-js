@@ -1,7 +1,8 @@
 import PriorityQueue from './queue';
 import { clearNode } from './draw_util';
 class AStarSearch {
-  constructor(startNode, endNode, blackctx) {
+  constructor(startNode, endNode, nodeMap, blackctx) {
+    this.nodeMap = nodeMap;
     this.startNode = startNode;
     this.endNode = endNode;
     this.ctx = blackctx;
@@ -13,6 +14,8 @@ class AStarSearch {
   }
 
   bfs() {
+    if (this.startNode.visited) this.resetVisited();
+    
     var startTime = Date.now();
     var queue = [];
     this.startNode.visited = true;
@@ -49,52 +52,8 @@ class AStarSearch {
     return false;
   }
   solve(weight) {
-    // var startTime = Date.now();
-    // // var updateTime = setInterval(function(){ 
-    // //   document.getElementById("timer").innerHTML = Date.now() - startTime;
-    // // }, 1);
-    // this.fringe = new PriorityQueue();
-    // var closed = [];
-
-    // this.startNode.gVal = 0;
-    // this.startNode.parent = this.startNode;
-
-    // // debugger;
-    // this.startNode.fVal = this.startNode.gVal + (this.startNode.hVal * weight);
-    // this.fringe.enqueue(this.startNode);
-
-    // while(!this.fringe.isEmpty()) {
-    //   var currentNode = this.fringe.dequeue();
-
-    //   if (currentNode.isEqual(this.endNode)) {
-    //     debugger;
-    //     this.time = Date.now() - startTime;
-    // //     clearInterval(updateTime);
-    //     return true;
-    //   }
-    //   clearNode(this.ctx, {row: currentNode.row, col: currentNode.col});
-    //   if (!currentNode.isMemberOf(closed)) {
-    //     closed.push(currentNode);
-    //     this.size = closed.length;
-    //     console.log(this.size);
-    //   }
-      
-    //   currentNode.neighbors.forEach(neighbor => {
-    //     // debugger;
-    //     if (!neighbor.isMemberOf(closed)) {
-    //       if (!this.fringe.includes(neighbor)){
-    //         // debugger;
-    //         neighbor.gVal = Number.MAX_SAFE_INTEGER;
-    //         neighbor.parent = null;
-    //       }
-    //       this.updateNode(currentNode, neighbor, weight);
-    //     }
-    //   });
-    // }
-    // // clearInterval(updateTime);
-    // debugger
-    // return false;
-
+    
+    var startTime = Date.now()
     this.fringe = new PriorityQueue();
     var closed = [];
 
@@ -104,21 +63,21 @@ class AStarSearch {
     this.fringe.enqueue(this.startNode);
     while (!this.fringe.isEmpty()) {
       var currentNode = this.fringe.dequeue();
+      clearNode(this.ctx, { row: currentNode.row, col: currentNode.col });
       if (currentNode.isEqual(this.endNode)) {
         console.log("found target");
+        this.time = Date.now() - startTime;
+        this.size = closed.length;
         return true;
       }
 
       closed.push(currentNode);
-      // debugger;
       currentNode.neighbors.forEach(node => {
         if (!node.isMemberOf(closed)) {
           if (!this.fringe.includes(node)) {
-            // debugger;
             node.gVal = Infinity;
             node.parent = null;
           }
-          // debugger;
           this.updateNode(currentNode, node, weight);
         }
       });
@@ -129,18 +88,6 @@ class AStarSearch {
   }
 
   updateNode(currentNode, neighbor, weight) {
-    // if (currentNode.gVal + currentNode.travelCost(neighbor) < neighbor.gVal) {
-    //   neighbor.gVal = currentNode.gVal + currentNode.travelCost(neighbor);
-    //   if (neighbor.parent === null) neighbor.parent = currentNode;
-
-    //   if ( this.fringe.includes(neighbor)) this.fringe.remove(neighbor);
-
-    //   neighbor.fVal = neighbor.gVal + (neighbor.hVal * weight);
-    //   // debugger
-    //   this.fringe.enqueue(neighbor);
-
-
-    // }
 
     if (currentNode.gVal + currentNode.travelCost(neighbor) < neighbor.gVal) {
       neighbor.gVal = currentNode.gVal + currentNode.travelCost(neighbor);
@@ -154,6 +101,16 @@ class AStarSearch {
     }
   }
 
+  resetVisited() {
+    this.startNode.visited = false;
+    this.endNode.visited = false;
+    
+    for (let i = 0; i < this.nodeMap.length; i++) {
+      for (let j = 0; j < this.nodeMap.length; j++) {
+        this.nodeMap[i][j].visited = false;
+      }
+    }
+  }
 }
 
 
