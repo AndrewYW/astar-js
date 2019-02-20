@@ -87,8 +87,10 @@ export const drawPath = (ctx, startNode, endNode) => {
   // debugger;
 
   nodeList.unshift(startNode);
+  var offset = 0;
   nodeList.forEach(node => {
-    drawTerrain(ctx, {row: node.row, col: node.col}, "yellow");
+    setTimeout(function() {drawTerrain(ctx, {row: node.row, col: node.col}, "yellow")}, offset);
+    offset += 15;
   });
 
 }

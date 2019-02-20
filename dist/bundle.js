@@ -191,8 +191,10 @@ const drawPath = (ctx, startNode, endNode) => {
   // debugger;
 
   nodeList.unshift(startNode);
+  var offset = 0;
   nodeList.forEach(node => {
-    drawTerrain(ctx, {row: node.row, col: node.col}, "yellow");
+    setTimeout(function() {drawTerrain(ctx, {row: node.row, col: node.col}, "yellow")}, offset);
+    offset += 15;
   });
 
 }
@@ -412,10 +414,10 @@ function solveMap(btn, map, output, ctx, blackctx) {
           } 
         } else if (alg === "bfs"){  //who cares about weight here 
           if (aStar.bfs()){
-            debugger;
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
             _draw_util__WEBPACK_IMPORTED_MODULE_0__["drawPath"](ctx, aStar.startNode, aStar.endNode);
+            btn.innerHTML = "Solve!";
           }
         } else if (alg === "uniform") { //weight = 0
           if (aStar.solve(0)){

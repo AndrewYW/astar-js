@@ -126,10 +126,10 @@ function solveMap(btn, map, output, ctx, blackctx) {
           } 
         } else if (alg === "bfs"){  //who cares about weight here 
           if (aStar.bfs()){
-            debugger;
             setTimeElapsed(aStar.time);
             setCoverage(aStar.size);
             DrawUtil.drawPath(ctx, aStar.startNode, aStar.endNode);
+            btn.innerHTML = "Solve!";
           }
         } else if (alg === "uniform") { //weight = 0
           if (aStar.solve(0)){
