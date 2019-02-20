@@ -22,8 +22,13 @@ Heuristic Pathfinder is a visualizer of several heuristic functions applied to t
 #### File Structure
 
 + Models
-  + graph.js: Class holding data regarding the grid (start and end nodes, grid 2d array, etc.)
-  + node.js (object): custom nodes for each grid position. Includes data necessary as well as algorithms to implement
+  + map.js: File holding data regarding the grid (start and end nodes, grid 2d array, etc.)
+  + node.js (object): custom nodes for each grid position. Includes data necessary for algorithms
+  + queue.js: Custom implementation of a priority queue, necessary for A* search.
+  + index.js: Webpack entry file.
+  + search_util.js: File containing search algorithm functions.
+  + heuristic_util.js: File containing functions for setting heuristic values.
+  + draw_util.js: Canvas rendering functions.
 
 ## Implementation Timeline
 
