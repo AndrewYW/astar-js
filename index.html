@@ -11,7 +11,28 @@
 </head>
 <body>
   <h1>A* Pathfinder</h1>
+  <button class="modal-btn" id="modal-btn">Info</button>
 
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" id="modal-close">&times;</span>
+      <h3>Info</h3>
+      <p class="information">Graph based search algorithms are used extensively in grid or graph based games for pathfinding, such as the
+      Civilization series. Certain search algorithms, such as Breadth First Search, are incredibly popular introductory
+      algorithms that can have added layers of complexity for specific circumstances. In an environment where a square node
+      graph (i.e: Each node has 8 neighbors) has movement costs associated with different terrains, the A* search family (BFS,
+      Dijkstra's Algorithm, A*) generally is used more than other search families.</p>
+      <div class="instructions">
+        <h3>Instructions</h3>
+        <p>Generate a map either randomly or using the inputs. Mountains represent doubled travel cost between tiles, and paths represent 1/4 travel cost.</p>
+        <p>Blocked tiles are untraversable.</p>
+        <p>Select an algorithm to implement</p>
+        <p>If A* is selected, then you can adjust the heuristic function (and how much weight the function has)</p>
+        <p>Solve!</p>
+      </div>
+    </div>
+  </div>
+  
   <div class="content">
     <div class="map">
       <canvas id="canvas" width="800" height="800"></canvas>
