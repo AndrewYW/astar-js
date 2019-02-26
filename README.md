@@ -41,7 +41,7 @@ This data is stored as a discretized 2d array, with different characters represe
 
 `queue.js` is a custom implementation of a Priority Queue, a self-sorting queue that calculates position based on a 'priority' value. For the pathfinder, the priority used is a Node's `fVal`.
 
-The actual algorithms are implemented using an `AStarSearch` class, which takes in `Map` Objects to parse data and find paths. The two main functions, `bfs` and `solve`, implement BFS and A* search respectively. Additionally, there is an `updateNode` helper for `solve`, which sets calculated values for an individual node.
+The actual algorithms are implemented using an `AStarSearch` class, which takes in `Map` Objects to parse data and find paths. The two main functions, `bfs` and `solve`, implement BFS and A* search respectively. Additionally, there is an `updateNode` helper for `solve`, which sets calculated values for an individual node. Upon completion of a path, the function will return true, with paths found through a node's `parent` key acting as a linked list.
 
 
 ## Search algorithm implementations
