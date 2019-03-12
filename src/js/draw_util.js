@@ -47,6 +47,7 @@ export const clearNode = (ctx, {row, col}) => {
 
   ctx.clearRect( x, y, 5, 5);
 }
+
 export const drawTerrain = (ctx, {row, col}, fillStyle) => {
   ctx.fillStyle = fillStyle;
   const y = row * 5
@@ -54,6 +55,15 @@ export const drawTerrain = (ctx, {row, col}, fillStyle) => {
 
   ctx.fillRect( x, y, 5, 5 );
 };
+
+export const drawCircle = (ctx, row, col, strokeStyle) => {
+  const x = col * 5 + 2;
+  const y = row * 5 + 2;
+  ctx.strokeStyle = strokeStyle;
+  ctx.beginPath();
+  ctx.arc(x, y, 20, 0, 2 * Math.PI);
+  ctx.stroke();
+}
 
 export const drawNode = (ctx, node) => {
   switch (node.type) {
@@ -100,8 +110,9 @@ export const drawPath = (ctx, startNode, endNode, count) => {
 
 const drawPoints = (ctx, start, end) => {
   
-  drawTerrain(ctx, {row: start.row, col: start.col}, "yellow");
-  drawTerrain(ctx, {row: end.row, col: end.col}, "yellow");
-  
+  drawTerrain(ctx, {row: start.row, col: start.col}, "red");
+  drawTerrain(ctx, {row: end.row, col: end.col}, "red");
+  drawCircle(ctx, start.row, start.col, "red");
+  drawCircle(ctx, end.row, end.col, "red");
 }
 

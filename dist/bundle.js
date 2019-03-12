@@ -90,7 +90,7 @@
 /*!*****************************!*\
   !*** ./src/js/draw_util.js ***!
   \*****************************/
-/*! exports provided: fillBlack, clearTerrain, clearMap, drawMap, clearNode, drawTerrain, drawNode, drawPath */
+/*! exports provided: fillBlack, clearTerrain, clearMap, drawMap, clearNode, drawTerrain, drawCircle, drawNode, drawPath */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -101,6 +101,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawMap", function() { return drawMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearNode", function() { return clearNode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawTerrain", function() { return drawTerrain; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawCircle", function() { return drawCircle; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawNode", function() { return drawNode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawPath", function() { return drawPath; });
 const fillBlack = ctx => {
@@ -152,6 +153,7 @@ const clearNode = (ctx, {row, col}) => {
 
   ctx.clearRect( x, y, 5, 5);
 }
+
 const drawTerrain = (ctx, {row, col}, fillStyle) => {
   ctx.fillStyle = fillStyle;
   const y = row * 5
@@ -159,6 +161,15 @@ const drawTerrain = (ctx, {row, col}, fillStyle) => {
 
   ctx.fillRect( x, y, 5, 5 );
 };
+
+const drawCircle = (ctx, row, col, strokeStyle) => {
+  const x = col * 5 + 2;
+  const y = row * 5 + 2;
+  ctx.strokeStyle = strokeStyle;
+  ctx.beginPath();
+  ctx.arc(x, y, 20, 0, 2 * Math.PI);
+  ctx.stroke();
+}
 
 const drawNode = (ctx, node) => {
   switch (node.type) {
@@ -205,9 +216,10 @@ const drawPath = (ctx, startNode, endNode, count) => {
 
 const drawPoints = (ctx, start, end) => {
   
-  drawTerrain(ctx, {row: start.row, col: start.col}, "yellow");
-  drawTerrain(ctx, {row: end.row, col: end.col}, "yellow");
-  
+  drawTerrain(ctx, {row: start.row, col: start.col}, "red");
+  drawTerrain(ctx, {row: end.row, col: end.col}, "red");
+  drawCircle(ctx, start.row, start.col, "red");
+  drawCircle(ctx, end.row, end.col, "red");
 }
 
 
