@@ -71,6 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const minDist = parseInt(distOutput.innerHTML);
     DrawUtil.clearMap(ctx2);
     map = createMap(ctx, centerCount, pathCount, blockRate, minDist, create, random, solve, "Create Map!");
+
+    const startCoords = document.getElementById("start-coords");
+    const endCoords = document.getElementById("end-coords");
+    startCoords.innerHTML = `[${map.startNode.row}, ${map.startNode.col}]`;
+    endCoords.innerHTML = `[${map.endNode.row}, ${map.endNode.col}]`;
   }
 
   let count = 0;
