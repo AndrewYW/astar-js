@@ -1,6 +1,6 @@
 # A* Pathfinder
 
-### [View live](www.andrewyw.me/astar-js)
+### [View live](https://www.andrewyw.io/astar-js)
 
 ## Background
 
