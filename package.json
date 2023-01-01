@@ -19,9 +19,9 @@
   },
   "homepage": "https://github.com/AndrewYW/astar-js#readme",
   "dependencies": {
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.3.0",
     "gh-pages": "^2.0.1",
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.2.3"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   }
 }
